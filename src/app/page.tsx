@@ -1,13 +1,30 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import SkillsTicker from "./components/SkillsTicker";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(0);
+  const [activeSection, setActiveSection] = useState("#about");
+  const [metricIndex, setMetricIndex] = useState(0);
   const navRef = useRef<HTMLDivElement | null>(null);
   const measureRef = useRef<HTMLDivElement | null>(null);
+  const heroRef = useRef<HTMLDivElement | null>(null);
+  const glowRef = useRef<HTMLDivElement | null>(null);
+  const slotRefs = useRef<HTMLDivElement[]>([]);
+  const operatorRef = useRef<HTMLSpanElement | null>(null);
+  const labelRef = useRef<HTMLSpanElement | null>(null);
+  const heroTextRef = useRef<HTMLDivElement | null>(null);
+  const heroHeadlineRef = useRef<HTMLHeadingElement | null>(null);
+  const heroBgRef = useRef<HTMLDivElement | null>(null);
+
+  const heroImage = "/confident%20style%20and%20charm.png";
 
   const navItems = useMemo(
     () => [
@@ -17,6 +34,20 @@ export default function Home() {
       { label: "Skills", href: "#skills" },
       { label: "Education", href: "#education" },
       { label: "Contact", href: "#contact" },
+    ],
+    []
+  );
+
+  const heroMetrics = useMemo(
+    () => [
+      { value: "12+", label: "Projects built across web, mobile, and analytics" },
+      { value: "35+", label: "Features, dashboards, and workflows shipped" },
+      { value: "6+", label: "Products taken from early idea to production-ready execution" },
+      { value: "5+", label: "Technologies used in real production environments" },
+      { value: "4+", label: "Cross-functional teams collaborated with" },
+      { value: "20+", label: "Product iterations, releases, or meaningful improvements" },
+      { value: "15%", label: "Increase in performance, usability, or engagement improvements delivered" },
+      { value: "100%", label: "Ownership across product thinking and technical execution" },
     ],
     []
   );
@@ -40,6 +71,52 @@ export default function Home() {
       }
     };
   }, []);
+
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") return;
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) {
+      const chunks = [heroHeadlineRef.current].filter(Boolean) as Element[];
+      if (chunks.length) {
+        gsap.set(chunks, { opacity: 1, y: 0 });
+      }
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      const chunks = [heroHeadlineRef.current].filter(Boolean) as Element[];
+
+      if (chunks.length) {
+        gsap.set(chunks, { opacity: 0, y: 10 });
+        const tl = gsap.timeline();
+        tl.to(chunks, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          stagger: 0.12,
+        });
+
+      }
+
+      if (heroBgRef.current) {
+        ScrollTrigger.create({
+          trigger: heroTextRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+          animation: gsap.fromTo(
+            heroBgRef.current,
+            { y: -10 },
+            { y: 10, ease: "none" }
+          ),
+        });
+      }
+    }, heroTextRef);
+
+    return () => ctx.revert();
+  }, []);
+
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -89,6 +166,59 @@ export default function Home() {
       ctx.clearRect(0, 0, width, height);
       boost *= 0.95;
       const speedMultiplier = 1 + boost;
+
+      // Light mesh: connect each particle to its 2 nearest neighbors within a small radius.
+      const maxDist = 90;
+      const maxDistSq = maxDist * maxDist;
+      for (let i = 0; i < particles.length; i += 1) {
+        const p = particles[i];
+        let n1 = -1;
+        let n2 = -1;
+        let d1 = Infinity;
+        let d2 = Infinity;
+
+        for (let j = 0; j < particles.length; j += 1) {
+          if (i === j) continue;
+          const q = particles[j];
+          const dx = (p.x - q.x) * width;
+          const dy = (p.y - q.y) * height;
+          const distSq = dx * dx + dy * dy;
+          if (distSq < maxDistSq) {
+            if (distSq < d1) {
+              d2 = d1;
+              n2 = n1;
+              d1 = distSq;
+              n1 = j;
+            } else if (distSq < d2) {
+              d2 = distSq;
+              n2 = j;
+            }
+          }
+        }
+
+        if (n1 !== -1) {
+          const q1 = particles[n1];
+          ctx.beginPath();
+          ctx.strokeStyle = "rgba(32, 36, 43, 0.06)";
+          ctx.lineWidth = 1;
+          ctx.moveTo(p.x * width, p.y * height);
+          ctx.lineTo(q1.x * width, q1.y * height);
+          ctx.stroke();
+        }
+
+        if (n1 !== -1 && n2 !== -1) {
+          const q1 = particles[n1];
+          const q2 = particles[n2];
+          ctx.beginPath();
+          ctx.strokeStyle = "rgba(32, 36, 43, 0.06)";
+          ctx.lineWidth = 1;
+          ctx.moveTo(p.x * width, p.y * height);
+          ctx.lineTo(q1.x * width, q1.y * height);
+          ctx.lineTo(q2.x * width, q2.y * height);
+          ctx.closePath();
+          ctx.stroke();
+        }
+      }
 
       for (const particle of particles) {
         particle.x += particle.vx * speedMultiplier;
@@ -166,6 +296,106 @@ export default function Home() {
   }, [navItems.length]);
 
   useEffect(() => {
+    if (!heroRef.current) {
+      return;
+    }
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) {
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      const outline = ".snake-border";
+      const shine = ".shine-sweep";
+
+      gsap.set(shine, {
+        opacity: 0,
+        attr: { x: -2200, y: 1400 },
+      });
+      gsap.set(outline, { opacity: 0.5 });
+
+      gsap.timeline({ repeat: -1, defaults: { ease: "power2.out" } })
+        .to(shine, { opacity: 0.7, duration: 0.45 })
+        .to(shine, { attr: { x: 2600, y: -1800 }, duration: 3.5 }, "<")
+        .to(shine, { opacity: 0, duration: 0.35 }, "-=0.2")
+        .to(outline, { opacity: 0.75, duration: 0.8 }, 0.2)
+        .to(outline, { opacity: 0.5, duration: 0.8 }, 1.2)
+        .to({}, { duration: 6.5 }, ">-0.3");
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setMetricIndex((prev) => (prev + 1) % heroMetrics.length);
+    }, 5000);
+    return () => window.clearInterval(interval);
+  }, [heroMetrics.length]);
+
+  useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) {
+      return;
+    }
+
+    const metric = heroMetrics[metricIndex];
+    const match = metric.value.match(/^(\d+)([%+]?)$/);
+    const digits = match ? match[1].split("") : ["0"];
+    const operator = match ? match[2] : "";
+    const digitHeight = 28;
+
+    // Animate digit reels
+    digits.forEach((digit, i) => {
+      const reel = slotRefs.current[i];
+      if (!reel) return;
+      const start = -digitHeight * (Math.floor(Math.random() * 10));
+      const end = -digitHeight * Number(digit);
+      gsap.set(reel, { y: start });
+      gsap.to(reel, { y: end, duration: 1.4, ease: "power2.out" });
+    });
+
+    if (operatorRef.current) {
+      gsap.fromTo(
+        operatorRef.current,
+        { opacity: 0, y: -6 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+      );
+    }
+    if (labelRef.current) {
+      gsap.fromTo(
+        labelRef.current,
+        { opacity: 0, y: 8 },
+        { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }
+      );
+    }
+  }, [metricIndex, heroMetrics]);
+
+
+  useEffect(() => {
+    if (!glowRef.current) {
+      return;
+    }
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) {
+      return;
+    }
+
+    const glow = glowRef.current;
+    const moveX = gsap.quickTo(glow, "x", { duration: 0.6, ease: "power3.out" });
+    const moveY = gsap.quickTo(glow, "y", { duration: 0.6, ease: "power3.out" });
+    gsap.set(glow, { x: window.innerWidth * 0.6, y: window.innerHeight * 0.2 });
+
+    const handleMove = (event: MouseEvent) => {
+      moveX(event.clientX);
+      moveY(event.clientY);
+    };
+
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, []);
+
+  useEffect(() => {
     const elements = Array.from(
       document.querySelectorAll<HTMLElement>(".scroll-reveal")
     );
@@ -173,11 +403,31 @@ export default function Home() {
       return;
     }
 
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) {
+      elements.forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.style.filter = "none";
+      });
+      return;
+    }
+
+    elements.forEach((el) => {
+      gsap.set(el, { opacity: 0, y: 18, filter: "blur(6px)" });
+    });
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
+            gsap.to(entry.target, {
+              opacity: 1,
+              y: 0,
+              filter: "blur(0px)",
+              duration: 0.9,
+              ease: "power2.out",
+            });
             observer.unobserve(entry.target);
           }
         });
@@ -189,32 +439,102 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>("section[id]")
+    );
+    if (sections.length === 0) {
+      return;
+    }
+
+    const lastEntries = new Map<Element, IntersectionObserverEntry>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (window.scrollY <= 0) {
+          setActiveSection("");
+          return;
+        }
+        entries.forEach((entry) => lastEntries.set(entry.target, entry));
+
+        let best: IntersectionObserverEntry | null = null;
+        let bestArea = 0;
+
+        for (const entry of lastEntries.values()) {
+          if (!entry.isIntersecting) continue;
+          const area = entry.intersectionRect.width * entry.intersectionRect.height;
+          if (area > bestArea) {
+            bestArea = area;
+            best = entry;
+          }
+        }
+
+        if (best?.target && (best.target as HTMLElement).id) {
+          setActiveSection(`#${(best.target as HTMLElement).id}`);
+        }
+      },
+      {
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+        rootMargin: "-96px 0px 0px 0px",
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    const handleScrollEdge = () => {
+      const scrolled = Math.round(window.scrollY);
+      const maxScroll = Math.round(
+        document.documentElement.scrollHeight - window.innerHeight
+      );
+
+      if (scrolled <= 0) {
+        setActiveSection("");
+        return;
+      }
+
+      if (scrolled >= maxScroll - 2) {
+        setActiveSection("#contact");
+      }
+    };
+
+    window.addEventListener("scroll", handleScrollEdge, { passive: true });
+    handleScrollEdge();
+
+    return () => {
+      window.removeEventListener("scroll", handleScrollEdge);
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div className="page-bg min-h-screen text-[15px]">
+      <div className="mouse-glow" ref={glowRef} aria-hidden="true" />
+      <div className="ambient-glow" aria-hidden="true" />
       <canvas className="dot-field" ref={canvasRef} aria-hidden="true" />
-      <header className="relative z-10">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 pb-6 pt-8">
+      <header className="site-header sticky top-0 z-20">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-6 px-6 pb-6 pt-8">
           <div className="flex flex-none items-center justify-start gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--line)] bg-white font-semibold text-[var(--ink)]">
-              GA
-            </div>
-            <div className="leading-none">
-              <p className="font-name whitespace-nowrap text-lg font-semibold tracking-[0.22em] text-[var(--ink)]">
+            <div className="leading-none name-block">
+              <p className="name-text font-name whitespace-nowrap text-lg font-semibold tracking-[0.22em] text-[var(--ink)]">
                 GAURAV ADVANI
               </p>
-              <p className="whitespace-nowrap text-[9px] tracking-[0.01em] text-muted">
-                Software Developer / Product Manager
-              </p>
+              <div className="title-marquee">
+                <span className="title-marquee__track">
+                  AI/ML · Full Stack · Product · Strategy · UI/UX
+                </span>
+              </div>
             </div>
           </div>
           <div
             ref={navRef}
-            className="nav-links flex min-w-0 flex-1 items-center justify-end gap-6 text-xs uppercase font-medium tracking-[0.28em]"
+            className="nav-links flex min-w-0 flex-1 items-center justify-end gap-6 text-sm uppercase font-medium tracking-[0.26em]"
           >
             {navItems.slice(0, visibleCount).map((item) => (
               <a
                 key={item.label}
-                className="transition hover:text-[var(--ink)]"
+                className={`transition hover:text-[var(--ink)] ${
+                  activeSection === item.href ? "nav-active" : ""
+                }`}
                 href={item.href}
               >
                 {item.label}
@@ -243,7 +563,7 @@ export default function Home() {
           aria-hidden="true"
         >
           {navItems.map((item) => (
-            <span key={item.label} className="text-xs uppercase tracking-[0.28em]">
+            <span key={item.label} className="text-sm uppercase tracking-[0.26em]">
               {item.label}
             </span>
           ))}
@@ -269,45 +589,78 @@ export default function Home() {
         )}
       </header>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-16 px-6 pb-24">
+      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-24">
         <section className="grid gap-10 pt-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
-          <div className="flex flex-col gap-6">
-            <h1 className="display-1 font-space reveal">
-              Uniting product vision and engineering rigor to create scalable experiences.
-            </h1>
-            <p className="body-lg reveal reveal-delay-1">
-              Product Manager (Technical) with a full-stack background and an M.S. in
-              Computer Science from Northeastern University. I translate data into
-              decision-ready products and ship cross-functional roadmaps.
-            </p>
-            <div className="flex flex-wrap gap-3 text-sm font-semibold reveal reveal-delay-2">
-              <a
-                className="rounded-full bg-[var(--ink)] px-6 py-3 text-white transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-lg"
-                href="#contact"
-              >
-                Let's collaborate
-              </a>
-              <a
-                className="rounded-full border border-[var(--line)] px-6 py-3 text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--ink)] hover:shadow-lg"
-                href="#projects"
-              >
-                View projects
-              </a>
-            </div>
-          </div>
-          <div className="flex justify-center lg:justify-end reveal reveal-delay-3">
-            <div className="hero-portrait-frame">
-              <img
-                src="/website.png"
-                alt="Gaurav Advani portrait"
-                className="hero-portrait h-full w-full object-contain"
-              />
-            </div>
-          </div>
-          <div className="flex justify-end">
-            <span className="section-eyebrow hero-eyebrow font-space text-right reveal reveal-delay-4">
-              Product · Tech · Strategy
+          <div ref={heroTextRef} className="relative flex flex-col gap-4">
+            <span className="section-eyebrow hero-eyebrow font-space text-left pts-color-3">
+              <span className="pts-word">Product</span>
+              <span className="pts-sep"> · </span>
+              <span className="pts-word">Tech</span>
+              <span className="pts-sep"> · </span>
+              <span className="pts-word">Strategy</span>
             </span>
+            <h1
+              ref={heroHeadlineRef}
+              className="font-space text-5xl font-semibold text-[#20242b] md:text-6xl lg:text-7xl"
+            >
+              Shaping ideas into scalable, well-engineered digital products that balance{" "}
+              <span className="relative inline-block text-[#4B5D7A] bounce-subtle bounce-delay-1">
+                vision
+              </span>{" "}
+              and{" "}
+              <span className="text-[#4B5D7A] bounce-subtle bounce-delay-2">execution</span>
+            </h1>
+          </div>
+          <div
+            ref={heroRef}
+            className="hero-media flex flex-col items-center justify-start gap-0 text-center reveal reveal-delay-3 lg:ml-auto lg:items-end lg:text-right lg:justify-self-end"
+          >
+            <img
+              className="hero-portrait hero-portrait-img"
+              src={heroImage}
+              alt="Gaurav animoji portrait"
+            />
+            <div className="hero-slot reveal reveal-delay-1">
+              <div className="slot-row">
+                <div className="slot-number" aria-hidden="true">
+                  {(() => {
+                    const metric = heroMetrics[metricIndex];
+                    const match = metric.value.match(/^(\d+)([%+]?)$/);
+                    const digits = match ? match[1].split("") : ["0"];
+                    const operator = match ? match[2] : "";
+                    slotRefs.current = [];
+                    return (
+                      <>
+                        <div className="slot-digits">
+                          {digits.map((digit, i) => (
+                            <div className="slot-window" key={`digit-${i}`}>
+                              <div
+                                className="slot-reel"
+                                ref={(el) => {
+                                  if (el) slotRefs.current[i] = el;
+                                }}
+                              >
+                                {Array.from({ length: 10 }).map((_, n) => (
+                                  <span key={n} className="slot-digit">
+                                    {n}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <span className="slot-operator" ref={operatorRef}>
+                          {operator}
+                        </span>
+                      </>
+                    );
+                  })()}
+                </div>
+                <span className="slot-label" ref={labelRef}>
+                  {heroMetrics[metricIndex].label}
+                </span>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -498,47 +851,7 @@ export default function Home() {
               </h2>
             </div>
           </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            {[
-              {
-                title: "Product & Strategy",
-                items:
-                  "Product Roadmapping, Market & Competitive Analysis, Stakeholder Management, Agile/Scrum, QA & Release Validation",
-              },
-              {
-                title: "Languages",
-                items: "TypeScript, JavaScript, Python, Java, PHP, SQL",
-              },
-              {
-                title: "Frontend",
-                items: "HTML, CSS, React.js, Next.js, TailwindCSS, Bootstrap 5",
-              },
-              {
-                title: "Backend & Database",
-                items:
-                  "Node.js, Flask, Django, Supabase, Firebase, PostgreSQL, MySQL, MongoDB",
-              },
-              {
-                title: "Mobile",
-                items: "Android Development (Java/Kotlin)",
-              },
-              {
-                title: "Tools & Platforms",
-                items: "Git, GitHub, VSCode, AWS, Figma",
-              },
-            ].map((item) => (
-              <div key={item.title} className="surface-card rounded-2xl p-5">
-                <h3 className="heading-3">{item.title}</h3>
-                <p className="body-md mt-2">{item.items}</p>
-              </div>
-            ))}
-          </div>
-          <div className="surface-card rounded-2xl p-5">
-            <h3 className="heading-3">Other</h3>
-            <p className="body-md mt-2">
-              Responsive Design, Human-Centered Design, UI Prototyping
-            </p>
-          </div>
+          <SkillsTicker />
         </section>
 
         <section id="education" className="scroll-reveal grid gap-6">
@@ -589,19 +902,19 @@ export default function Home() {
           </div>
           <div className="flex flex-wrap gap-3 text-sm font-semibold">
             <a
-              className="rounded-full bg-[var(--ink)] px-6 py-3 text-white transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-lg"
+              className="neon-button rounded-full bg-[var(--ink)] px-6 py-3 text-white transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-lg"
               href="mailto:hello@gauravadvani.com"
             >
               hello@gauravadvani.com
             </a>
             <a
-              className="rounded-full border border-[var(--line)] px-6 py-3 text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--ink)] hover:shadow-lg"
+              className="neon-button rounded-full border border-[var(--line)] px-6 py-3 text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--ink)] hover:shadow-lg"
               href="#"
             >
               LinkedIn
             </a>
             <a
-              className="rounded-full border border-[var(--line)] px-6 py-3 text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--ink)] hover:shadow-lg"
+              className="neon-button rounded-full border border-[var(--line)] px-6 py-3 text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--ink)] hover:shadow-lg"
               href="#"
             >
               GitHub
