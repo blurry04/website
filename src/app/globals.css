@@ -29,7 +29,7 @@ body::-webkit-scrollbar {
 body {
   background: #eceef1;
   color: #20242b;
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: "Satoshi", var(--font-sans), system-ui, sans-serif;
   text-rendering: optimizeLegibility;
   min-height: 100vh;
 }
@@ -39,7 +39,7 @@ section[id] {
 }
 
 .font-display {
-  font-family: var(--font-display), "Times New Roman", serif;
+  font-family: "Satoshi", var(--font-sans), system-ui, sans-serif;
 }
 
 .font-mono {
@@ -55,11 +55,20 @@ section[id] {
 }
 
 .font-space {
-  font-family: var(--font-space), "Segoe UI", sans-serif;
+  font-family: "Satoshi", var(--font-sans), system-ui, sans-serif;
 }
 
 .font-name {
-  font-family: var(--font-name), "Avenir Next", "Trebuchet MS", sans-serif;
+  font-family: "Satoshi", var(--font-sans), system-ui, sans-serif;
+}
+
+.header-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 999px;
+  object-fit: contain;
+  background: transparent;
+  flex-shrink: 0;
 }
 
 :root {
@@ -393,12 +402,7 @@ section[id] {
   object-fit: cover;
   object-position: center 0%;
   margin-bottom: 2px;
-  -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 60%, transparent 76%);
-  mask-image: radial-gradient(circle at 50% 45%, #000 60%, transparent 76%);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
+  background: #eceef1;
   transition: transform 220ms ease, filter 220ms ease;
 }
 
@@ -632,15 +636,11 @@ section[id] {
   line-height: 28px;
   text-align: center;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 6px rgba(47, 126, 104, 0.2);
-  animation: slotGlow 2.6s ease-in-out infinite;
 }
 
 .slot-operator {
   font-size: 1.4rem;
   margin-left: 2px;
-  text-shadow: 0 0 6px rgba(47, 126, 104, 0.2);
-  animation: slotGlow 2.6s ease-in-out infinite;
 }
 
 .slot-label {
@@ -738,18 +738,6 @@ section[id] {
 
 .bounce-delay-2 {
   animation-delay: 0.2s;
-}
-
-@keyframes slotGlow {
-  0% {
-    text-shadow: 0 0 4px rgba(47, 126, 104, 0.15);
-  }
-  50% {
-    text-shadow: 0 0 12px rgba(47, 126, 104, 0.35);
-  }
-  100% {
-    text-shadow: 0 0 4px rgba(47, 126, 104, 0.15);
-  }
 }
 
 .body-md {

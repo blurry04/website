@@ -24,7 +24,7 @@ export default function Home() {
   const heroHeadlineRef = useRef<HTMLHeadingElement | null>(null);
   const heroBgRef = useRef<HTMLDivElement | null>(null);
 
-  const heroImage = "/confident%20style%20and%20charm.png";
+  const heroImage = "/Confident%20style%20and%20charm.png";
 
   const navItems = useMemo(
     () => [
@@ -514,6 +514,11 @@ export default function Home() {
       <header className="site-header sticky top-0 z-20">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-6 px-6 pb-6 pt-8">
           <div className="flex flex-none items-center justify-start gap-3">
+            <img
+              className="header-avatar"
+              src={heroImage}
+              alt="Gaurav portrait"
+            />
             <div className="leading-none name-block">
               <p className="name-text font-name whitespace-nowrap text-lg font-semibold tracking-[0.22em] text-[var(--ink)]">
                 GAURAV ADVANI
@@ -593,15 +598,13 @@ export default function Home() {
         <section className="grid gap-10 pt-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
           <div ref={heroTextRef} className="relative flex flex-col gap-4">
             <span className="section-eyebrow hero-eyebrow font-space text-left pts-color-3">
-              <span className="pts-word">Product</span>
-              <span className="pts-sep"> · </span>
-              <span className="pts-word">Tech</span>
-              <span className="pts-sep"> · </span>
-              <span className="pts-word">Strategy</span>
+              <span className="block">Tech</span>
+              <span className="block">Product</span>
+              <span className="block">Strategy</span>
             </span>
             <h1
               ref={heroHeadlineRef}
-              className="font-space text-5xl font-semibold text-[#20242b] md:text-6xl lg:text-7xl"
+              className="font-space text-[10px] font-semibold text-[#20242b] md:text-[10px] lg:text-[10px]"
             >
               Shaping ideas into scalable, well-engineered digital products that balance{" "}
               <span className="relative inline-block text-[#4B5D7A] bounce-subtle bounce-delay-1">
@@ -615,11 +618,6 @@ export default function Home() {
             ref={heroRef}
             className="hero-media flex flex-col items-center justify-start gap-0 text-center reveal reveal-delay-3 lg:ml-auto lg:items-end lg:text-right lg:justify-self-end"
           >
-            <img
-              className="hero-portrait hero-portrait-img"
-              src={heroImage}
-              alt="Gaurav animoji portrait"
-            />
             <div className="hero-slot reveal reveal-delay-1">
               <div className="slot-row">
                 <div className="slot-number" aria-hidden="true">
