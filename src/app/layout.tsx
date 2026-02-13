@@ -47,9 +47,9 @@ const name = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Gaurav Advani — Personal Site",
+  title: "Gaurav Advani",
   description:
-    "Portfolio and writing hub for Gaurav Advani: selected projects, notes, and ways to connect.",
+    "Welcome to the Matrix.",
 };
 
 export default function RootLayout({

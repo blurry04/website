@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import SkillsTicker from "./components/SkillsTicker";
+import ImpactExperience from "./components/ImpactExperience";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,7 +29,7 @@ export default function Home() {
   const navItems = useMemo(
     () => [
       { label: "About", href: "#about" },
-      { label: "Impact", href: "#impact" },
+      { label: "Impact", href: "/impact" },
       { label: "Skills", href: "#skills" },
       { label: "Education", href: "#education" },
       { label: "Contact", href: "#contact" },
@@ -597,12 +598,12 @@ export default function Home() {
         )}
       </header>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-24 pt-10">
-        <section className="grid gap-10 pt-8 lg:grid-cols-[1.25fr_0.75fr] lg:items-start">
-          <div className="lg:col-span-2 flex w-full justify-center my-6">
+      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-24 pt-[6px]">
+        <section className="grid gap-10 pt-0 lg:grid-cols-[1.25fr_0.75fr] lg:items-start">
+          <div className="lg:col-span-2 flex w-full justify-center mt-0 mb-6">
             <p
               ref={heroHeadlineRef}
-              className="font-space text-center text-[18px] font-semibold text-[#111317] uppercase md:text-[18px] lg:text-[18px]"
+              className="font-space text-center text-[18px] font-semibold text-[#111317] uppercase md:text-[18px] lg:text-[18px] text-shadow-sm"
             >
               Building software where{" "}
               <span className="gradient-wave">strategy</span> and{" "}
@@ -688,134 +689,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="impact" className="scroll-reveal grid gap-6">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="section-eyebrow">Impact</p>
-              <h2 className="heading-2 mt-2">
-                Product and engineering leadership.
-              </h2>
-            </div>
-          </div>
-          <div className="timeline-line grid gap-6 rounded-3xl border border-[var(--line)] bg-white/70 p-6">
-            {[
-              {
-                role: "Product Manager Intern (Technical)",
-                org: "EmpoweRx / United States",
-                time: "",
-                points: [
-                  "Led a Market Analysis Tool powered by BLS.gov APIs for county-level wage insights.",
-                  "Acted as technical liaison between leadership, clients, vendors, and engineering.",
-                  "Migrated AWS and GitHub infrastructure from vendors to in-house teams.",
-                  "Owned product roadmap planning and execution aligned to business objectives.",
-                  "Coordinated offshore engineering delivery, QA, releases, and production support.",
-                ],
-              },
-              {
-                role: "Full-Stack Developer Intern",
-                org: "Ekahal / Mumbai, India",
-                time: "",
-                points: [
-                  "Revamped dashboards and pages using HTML, Bootstrap 5, and React.js.",
-                  "Refactored legacy components for 20% faster load times.",
-                  "Improved chatbot UX for 10% higher engagement and aligned teams with Figma prototypes.",
-                ],
-              },
-              {
-                role: "Web Developer Intern",
-                org: "KritexCo / Mumbai, India",
-                time: "",
-                points: [
-                  "Built responsive landing pages that reduced bounce rate by 15%.",
-                  "Developed React.js UI components and iterated with user feedback and A/B testing.",
-                ],
-              },
-            ].map((item) => (
-              <article key={item.role} className="grid gap-4 pl-10">
-                <div className="flex items-start gap-4">
-                  <span className="mt-2 flex h-6 w-6 items-center justify-center">
-                    <span className="timeline-dot" />
-                  </span>
-                  <div>
-                    <h3 className="heading-3">
-                      {item.role}
-                    </h3>
-                    <p className="body-md">{item.org}</p>
-                    {item.time && (
-                      <p className="text-xs uppercase tracking-[0.22em] text-muted">
-                        {item.time}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <ul className="grid gap-2 body-md">
-                  {item.points.map((point) => (
-                    <li key={point} className="flex gap-2">
-                      <span className="text-accent">-</span>
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-          <div className="mt-10 flex items-end justify-between gap-4">
-            <div>
-              <p className="section-eyebrow">Projects</p>
-              <h3 className="heading-3 mt-2">
-                Selected builds with measurable impact.
-              </h3>
-            </div>
-          </div>
-          <div className="grid gap-5 lg:grid-cols-3">
-            {[
-              {
-                title: "Quill & Pigeon",
-                subtitle: "Artist Analytics Dashboard",
-                points: [
-                  "Responsive analytics dashboard for email engagement, traffic, and sales insights.",
-                  "Built with Next.js + TailwindCSS and modular component system.",
-                  "Supabase Auth + real-time PostgreSQL data pipelines.",
-                ],
-              },
-              {
-                title: "Travelpedia",
-                subtitle: "Android Travel Planner App",
-                points: [
-                  "Itinerary planning, expense tracking, and packing list management.",
-                  "Java-based dynamic UI flows with conditional forms and date pickers.",
-                  "Firebase Firestore real-time data with editing and deletion support.",
-                ],
-              },
-              {
-                title: "Crisis Communication App",
-                subtitle: "UX/UI Design",
-                points: [
-                  "Peer-to-peer emergency comms prototype for low-connectivity regions.",
-                  "Figma wireframes for offline messaging, status updates, and risk mapping.",
-                  "Awarded \"Most Feasible Solution\" at Pine Tree Hackathon.",
-                ],
-              },
-            ].map((item) => (
-              <article key={item.title} className="surface-card rounded-3xl p-6">
-                <p className="text-xs uppercase tracking-[0.24em] text-muted">
-                  {item.subtitle}
-                </p>
-                <h3 className="heading-3 mt-3">
-                  {item.title}
-                </h3>
-                <ul className="body-md mt-4 grid gap-2">
-                  {item.points.map((point) => (
-                    <li key={point} className="flex gap-2">
-                      <span className="text-accent">-</span>
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </section>
+        <ImpactExperience />
 
         <section id="skills" className="scroll-reveal grid gap-6">
           <div className="flex items-end justify-between gap-4">
