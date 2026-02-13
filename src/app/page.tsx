@@ -10,7 +10,6 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(0);
   const [activeSection, setActiveSection] = useState("#about");
   const [metricIndex, setMetricIndex] = useState(0);
   const navRef = useRef<HTMLDivElement | null>(null);
@@ -29,14 +28,14 @@ export default function Home() {
   const navItems = useMemo(
     () => [
       { label: "About", href: "#about" },
-      { label: "Experience", href: "#experience" },
-      { label: "Projects", href: "#projects" },
+      { label: "Impact", href: "#impact" },
       { label: "Skills", href: "#skills" },
       { label: "Education", href: "#education" },
       { label: "Contact", href: "#contact" },
     ],
     []
   );
+  const [visibleCount, setVisibleCount] = useState(navItems.length);
 
   const heroMetrics = useMemo(
     () => [
@@ -520,7 +519,7 @@ export default function Home() {
               alt="Gaurav portrait"
             />
             <div className="leading-none name-block">
-              <p className="name-text font-name whitespace-nowrap text-lg font-semibold tracking-[0.22em] text-[var(--ink)]">
+              <p className="name-text font-name whitespace-nowrap text-lg font-semibold tracking-[0.06em] text-[var(--ink)]">
                 GAURAV ADVANI
               </p>
               <div className="title-marquee">
@@ -530,6 +529,10 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <span className="status-pill status-pill--header">
+            <span className="status-dot" aria-hidden="true" />
+            OPEN TO PRODUCT AND TECH
+          </span>
           <div
             ref={navRef}
             className="nav-links flex min-w-0 flex-1 items-center justify-end gap-6 text-sm uppercase font-medium tracking-[0.26em]"
@@ -574,8 +577,8 @@ export default function Home() {
           ))}
         </div>
         {menuOpen && visibleCount < navItems.length && (
-          <div className="mx-auto w-full max-w-6xl px-6 pb-6">
-            <div className="surface-card rounded-2xl p-4 text-xs uppercase tracking-[0.24em] text-muted">
+          <div className="mx-auto flex w-full max-w-7xl justify-end px-6 pb-6">
+            <div className="surface-card w-[240px] rounded-2xl p-4 text-xs uppercase tracking-[0.24em] text-muted shadow-lg">
               <div className="grid gap-3">
                 {navItems.slice(visibleCount).map((item) => (
                   <a
@@ -594,70 +597,47 @@ export default function Home() {
         )}
       </header>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-24">
-        <section className="grid gap-10 pt-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
-          <div ref={heroTextRef} className="relative flex flex-col gap-4">
-            <span className="section-eyebrow hero-eyebrow font-space text-left pts-color-3">
-              <span className="block">Tech</span>
-              <span className="block">Product</span>
-              <span className="block">Strategy</span>
-            </span>
-            <h1
+      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-24 pt-10">
+        <section className="grid gap-10 pt-8 lg:grid-cols-[1.25fr_0.75fr] lg:items-start">
+          <div className="lg:col-span-2 flex w-full justify-center my-6">
+            <p
               ref={heroHeadlineRef}
-              className="font-space text-[10px] font-semibold text-[#20242b] md:text-[10px] lg:text-[10px]"
+              className="font-space text-center text-[18px] font-semibold text-[#111317] uppercase md:text-[18px] lg:text-[18px]"
             >
-              Shaping ideas into scalable, well-engineered digital products that balance{" "}
-              <span className="relative inline-block text-[#4B5D7A] bounce-subtle bounce-delay-1">
-                vision
-              </span>{" "}
-              and{" "}
-              <span className="text-[#4B5D7A] bounce-subtle bounce-delay-2">execution</span>
-            </h1>
+              Building software where{" "}
+              <span className="gradient-wave">strategy</span> and{" "}
+              <span className="gradient-wave">engineering</span> move in sync.
+            </p>
+          </div>
+          <div ref={heroTextRef} className="flex flex-col gap-6">
+            <span className="font-space text-left text-[116px] font-black uppercase tracking-[-0.02em] leading-[0.88] text-white pts-shadow">
+              <span className="block pts-line text-[#111317]" data-text="Product.">
+                Product<span className="pts-dot">.</span>
+              </span>
+              <span className="block pts-line" data-text="Systems.">
+                Systems<span className="pts-dot">.</span>
+              </span>
+              <span className="block pts-line text-[#4B5D7A]" data-text="Scale.">
+                Scale<span className="pts-dot">.</span>
+              </span>
+            </span>
           </div>
           <div
             ref={heroRef}
-            className="hero-media flex flex-col items-center justify-start gap-0 text-center reveal reveal-delay-3 lg:ml-auto lg:items-end lg:text-right lg:justify-self-end"
+            className="hero-media flex flex-col items-center justify-start gap-6"
           >
-            <div className="hero-slot reveal reveal-delay-1">
-              <div className="slot-row">
-                <div className="slot-number" aria-hidden="true">
-                  {(() => {
-                    const metric = heroMetrics[metricIndex];
-                    const match = metric.value.match(/^(\d+)([%+]?)$/);
-                    const digits = match ? match[1].split("") : ["0"];
-                    const operator = match ? match[2] : "";
-                    slotRefs.current = [];
-                    return (
-                      <>
-                        <div className="slot-digits">
-                          {digits.map((digit, i) => (
-                            <div className="slot-window" key={`digit-${i}`}>
-                              <div
-                                className="slot-reel"
-                                ref={(el) => {
-                                  if (el) slotRefs.current[i] = el;
-                                }}
-                              >
-                                {Array.from({ length: 10 }).map((_, n) => (
-                                  <span key={n} className="slot-digit">
-                                    {n}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                        <span className="slot-operator" ref={operatorRef}>
-                          {operator}
-                        </span>
-                      </>
-                    );
-                  })()}
-                </div>
-                <span className="slot-label" ref={labelRef}>
-                  {heroMetrics[metricIndex].label}
-                </span>
-              </div>
+            <div className="hero-image-wrap hero-image-wrap--line">
+              <img
+                className="hero-editorial-image"
+                src="/website.png"
+                alt="Website preview"
+              />
+            </div>
+            <div className="hero-quote mt-6 w-[min(38vw,520px)] font-space text-center text-[24px] font-semibold text-[#20242b] md:text-[24px] lg:text-[24px]">
+              <p className="leading-relaxed">“Simple can be harder than complex.”</p>
+              <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[#20242b]/80">
+                — Steve Jobs
+              </p>
             </div>
           </div>
         </section>
@@ -708,10 +688,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="experience" className="scroll-reveal grid gap-6">
+        <section id="impact" className="scroll-reveal grid gap-6">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="section-eyebrow">Experience</p>
+              <p className="section-eyebrow">Impact</p>
               <h2 className="heading-2 mt-2">
                 Product and engineering leadership.
               </h2>
@@ -779,15 +759,12 @@ export default function Home() {
               </article>
             ))}
           </div>
-        </section>
-
-        <section id="projects" className="scroll-reveal grid gap-6">
-          <div className="flex items-end justify-between gap-4">
+          <div className="mt-10 flex items-end justify-between gap-4">
             <div>
               <p className="section-eyebrow">Projects</p>
-              <h2 className="heading-2 mt-2">
+              <h3 className="heading-3 mt-2">
                 Selected builds with measurable impact.
-              </h2>
+              </h3>
             </div>
           </div>
           <div className="grid gap-5 lg:grid-cols-3">
