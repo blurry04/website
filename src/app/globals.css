@@ -204,11 +204,15 @@ section[id] {
   animation: statusPulse 6s ease-in-out infinite;
 }
 
+.text-shadow-sm {
+  text-shadow: 0 2px 8px rgba(32, 36, 43, 0.16);
+}
+
 .status-pill--header {
   border-color: rgba(32, 36, 43, 0.08);
   background: transparent;
   color: rgba(32, 36, 43, 0.55);
-  font-size: 0.42rem;
+  font-size: 12px;
   letter-spacing: 0.18em;
   padding: 2px 8px;
 }
