@@ -233,10 +233,7 @@ export default function ImpactExperience() {
           ))}
         </div>
       ) : (
-        <div
-          ref={viewportRef}
-          className="relative overflow-hidden rounded-3xl border border-[var(--line)] bg-white/60"
-        >
+        <div ref={viewportRef} className="relative overflow-hidden">
           <div
             ref={trackRef}
             className="flex items-stretch gap-8 px-6 py-8"
