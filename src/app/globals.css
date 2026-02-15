@@ -93,7 +93,7 @@ section[id] {
 }
 
 .gradient-wave {
-  background: linear-gradient(110deg, #6f84a3, #b7c6da, #6f84a3);
+  background: linear-gradient(110deg, #4169e1, #6f86f2, #4169e1);
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -208,6 +208,14 @@ section[id] {
   text-transform: uppercase;
   color: rgba(32, 36, 43, 0.55);
   text-align: center;
+}
+
+.headline-and {
+  color: #ffffff;
+}
+
+.headline-shadow {
+  text-shadow: 0 18px 40px rgba(16, 20, 26, 0.55);
 }
 .pts-sway {
   display: inline-block;

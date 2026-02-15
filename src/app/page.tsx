@@ -549,10 +549,11 @@ export default function Home() {
         <div className="flex w-full justify-center mt-[30px]">
           <p
             ref={heroHeadlineRef}
-            className="hero-flow font-space text-center text-[18px] font-semibold text-[#111317] uppercase md:text-[18px] lg:text-[18px] text-shadow-sm"
+            className="hero-flow font-space text-center text-[18px] font-semibold text-[#4B5D7A] uppercase md:text-[18px] lg:text-[18px] text-shadow-sm headline-shadow"
           >
             Building software where{" "}
-            <span className="gradient-wave">strategy</span> and{" "}
+            <span className="gradient-wave">strategy</span>{" "}
+            <span className="headline-and">and</span>{" "}
             <span className="gradient-wave">engineering</span> move in sync.
           </p>
         </div>
