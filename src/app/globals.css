@@ -93,7 +93,7 @@ section[id] {
 }
 
 .gradient-wave {
-  background: linear-gradient(110deg, #4169e1, #6f86f2, #4169e1);
+  background: linear-gradient(110deg, #0018f9, #6f7dff, #0018f9);
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -211,7 +211,7 @@ section[id] {
 }
 
 .headline-and {
-  color: #ffffff;
+  color: #4b5d7a;
 }
 
 .headline-shadow {
