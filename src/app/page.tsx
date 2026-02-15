@@ -3,16 +3,29 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import {
+  BadgeCheck,
+  ChevronDown,
+  Compass,
+  HeartHandshake,
+  Lightbulb,
+  Rocket,
+  Scale,
+  ShieldCheck,
+  Ship,
+  Users,
+  Workflow,
+} from "lucide-react";
 import SkillsTicker from "./components/SkillsTicker";
 import ImpactExperience from "./components/ImpactExperience";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#about");
   const [metricIndex, setMetricIndex] = useState(0);
+  const [showScrollHint, setShowScrollHint] = useState(true);
   const navRef = useRef<HTMLDivElement | null>(null);
   const measureRef = useRef<HTMLDivElement | null>(null);
   const heroRef = useRef<HTMLDivElement | null>(null);
@@ -23,13 +36,14 @@ export default function Home() {
   const heroTextRef = useRef<HTMLDivElement | null>(null);
   const heroHeadlineRef = useRef<HTMLHeadingElement | null>(null);
   const heroBgRef = useRef<HTMLDivElement | null>(null);
+  const meshRef = useRef<HTMLDivElement | null>(null);
 
   const heroImage = "/Confident%20style%20and%20charm.png";
 
   const navItems = useMemo(
     () => [
       { label: "About", href: "#about" },
-      { label: "Impact", href: "/impact" },
+      { label: "Impact", href: "#impact" },
       { label: "Skills", href: "#skills" },
       { label: "Education", href: "#education" },
       { label: "Contact", href: "#contact" },
@@ -69,6 +83,23 @@ export default function Home() {
       if (scrollTimer) {
         clearTimeout(scrollTimer);
       }
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateHint = () => {
+      const maxScroll = Math.max(
+        0,
+        document.documentElement.scrollHeight - window.innerHeight
+      );
+      setShowScrollHint(window.scrollY < maxScroll - 2);
+    };
+    updateHint();
+    window.addEventListener("scroll", updateHint, { passive: true });
+    window.addEventListener("resize", updateHint);
+    return () => {
+      window.removeEventListener("scroll", updateHint);
+      window.removeEventListener("resize", updateHint);
     };
   }, []);
 
@@ -119,138 +150,23 @@ export default function Home() {
 
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) {
+    const mesh = meshRef.current;
+    if (!mesh) {
       return;
     }
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      return;
-    }
-
-    let width = 0;
-    let height = 0;
-    let animationId = 0;
-    let boost = 0;
-    let lastScrollY = window.scrollY;
-
-    const particleCount = 420;
-    const particles = Array.from({ length: particleCount }).map(() => ({
-      x: Math.random(),
-      y: Math.random(),
-      vx: (Math.random() - 0.5) * 0.004,
-      vy: (Math.random() - 0.5) * 0.004,
-      radius: Math.random() * 1.4 + 1.0,
-      alpha: Math.random() * 0.14 + 0.05,
-    }));
-
-    const resize = () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = Math.floor(width * window.devicePixelRatio);
-      canvas.height = Math.floor(height * window.devicePixelRatio);
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+    const handleMove = (event: MouseEvent) => {
+      const rect = mesh.getBoundingClientRect();
+      const mx = (event.clientX - rect.left) / rect.width;
+      const my = (event.clientY - rect.top) / rect.height;
+      const meshX = 50 + (mx - 0.5) * 18;
+      const meshY = 50 + (my - 0.5) * 18;
+      mesh.style.setProperty("--mx", `${meshX.toFixed(2)}%`);
+      mesh.style.setProperty("--my", `${meshY.toFixed(2)}%`);
     };
 
-    const handleScroll = () => {
-      const current = window.scrollY;
-      const delta = Math.abs(current - lastScrollY);
-      lastScrollY = current;
-      boost = Math.min(0.9, boost + delta * 0.0002);
-    };
-
-    const tick = () => {
-      ctx.clearRect(0, 0, width, height);
-      boost *= 0.95;
-      const speedMultiplier = 1 + boost;
-
-      // Light mesh: connect each particle to its 2 nearest neighbors within a small radius.
-      const maxDist = 90;
-      const maxDistSq = maxDist * maxDist;
-      for (let i = 0; i < particles.length; i += 1) {
-        const p = particles[i];
-        let n1 = -1;
-        let n2 = -1;
-        let d1 = Infinity;
-        let d2 = Infinity;
-
-        for (let j = 0; j < particles.length; j += 1) {
-          if (i === j) continue;
-          const q = particles[j];
-          const dx = (p.x - q.x) * width;
-          const dy = (p.y - q.y) * height;
-          const distSq = dx * dx + dy * dy;
-          if (distSq < maxDistSq) {
-            if (distSq < d1) {
-              d2 = d1;
-              n2 = n1;
-              d1 = distSq;
-              n1 = j;
-            } else if (distSq < d2) {
-              d2 = distSq;
-              n2 = j;
-            }
-          }
-        }
-
-        if (n1 !== -1) {
-          const q1 = particles[n1];
-          ctx.beginPath();
-          ctx.strokeStyle = "rgba(32, 36, 43, 0.06)";
-          ctx.lineWidth = 1;
-          ctx.moveTo(p.x * width, p.y * height);
-          ctx.lineTo(q1.x * width, q1.y * height);
-          ctx.stroke();
-        }
-
-        if (n1 !== -1 && n2 !== -1) {
-          const q1 = particles[n1];
-          const q2 = particles[n2];
-          ctx.beginPath();
-          ctx.strokeStyle = "rgba(32, 36, 43, 0.06)";
-          ctx.lineWidth = 1;
-          ctx.moveTo(p.x * width, p.y * height);
-          ctx.lineTo(q1.x * width, q1.y * height);
-          ctx.lineTo(q2.x * width, q2.y * height);
-          ctx.closePath();
-          ctx.stroke();
-        }
-      }
-
-      for (const particle of particles) {
-        particle.x += particle.vx * speedMultiplier;
-        particle.y += particle.vy * speedMultiplier;
-
-        if (particle.x < -0.05) particle.x = 1.05;
-        if (particle.x > 1.05) particle.x = -0.05;
-        if (particle.y < -0.05) particle.y = 1.05;
-        if (particle.y > 1.05) particle.y = -0.05;
-
-        const px = particle.x * width;
-        const py = particle.y * height;
-
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(32, 36, 43, ${particle.alpha})`;
-        ctx.arc(px, py, particle.radius, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      animationId = window.requestAnimationFrame(tick);
-    };
-
-    resize();
-    window.addEventListener("resize", resize);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    animationId = window.requestAnimationFrame(tick);
-
-    return () => {
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("scroll", handleScroll);
-      window.cancelAnimationFrame(animationId);
-    };
+    window.addEventListener("mousemove", handleMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMove);
   }, []);
 
   useEffect(() => {
@@ -510,9 +426,11 @@ export default function Home() {
     <div className="page-bg min-h-screen text-[15px]">
       <div className="mouse-glow" ref={glowRef} aria-hidden="true" />
       <div className="ambient-glow" aria-hidden="true" />
-      <canvas className="dot-field" ref={canvasRef} aria-hidden="true" />
+      <div className="fluid-compare" aria-hidden="true">
+        <div className="fluid-half fluid-mesh" ref={meshRef} />
+      </div>
       <header className="site-header sticky top-0 z-20">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-6 px-6 pb-6 pt-8">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-6 px-6 pb-4 pt-6">
           <div className="flex flex-none items-center justify-start gap-3">
             <img
               className="header-avatar"
@@ -520,7 +438,7 @@ export default function Home() {
               alt="Gaurav portrait"
             />
             <div className="leading-none name-block">
-              <p className="name-text font-name whitespace-nowrap text-lg font-semibold tracking-[0.06em] text-[var(--ink)]">
+              <p className="name-text font-name whitespace-nowrap text-base font-semibold tracking-[0.06em] text-[var(--ink)]">
                 GAURAV ADVANI
               </p>
               <div className="title-marquee">
@@ -530,13 +448,9 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <span className="status-pill status-pill--header">
-            <span className="status-dot" aria-hidden="true" />
-            OPEN TO PRODUCT AND TECH
-          </span>
           <div
             ref={navRef}
-            className="nav-links flex min-w-0 flex-1 items-center justify-end gap-6 text-sm uppercase font-medium tracking-[0.26em]"
+            className="nav-links flex min-w-0 flex-1 items-center justify-end gap-6 text-xs uppercase font-medium tracking-[0.26em]"
           >
             {navItems.slice(0, visibleCount).map((item) => (
               <a
@@ -598,18 +512,14 @@ export default function Home() {
         )}
       </header>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-24 pt-[6px]">
-        <section className="grid gap-10 pt-0 lg:grid-cols-[1.25fr_0.75fr] lg:items-start">
-          <div className="lg:col-span-2 flex w-full justify-center mt-0 mb-6">
-            <p
-              ref={heroHeadlineRef}
-              className="font-space text-center text-[18px] font-semibold text-[#111317] uppercase md:text-[18px] lg:text-[18px] text-shadow-sm"
-            >
-              Building software where{" "}
-              <span className="gradient-wave">strategy</span> and{" "}
-              <span className="gradient-wave">engineering</span> move in sync.
-            </p>
-          </div>
+      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-8 pt-[20px]">
+        <div className="flex w-full justify-center">
+          <span className="status-pill status-pill--header">
+            <span className="status-dot" aria-hidden="true" />
+            OPEN TO PRODUCT AND TECH
+          </span>
+        </div>
+        <section className="grid gap-10 pt-0 lg:grid-cols-[1.25fr_0.75fr] lg:items-stretch">
           <div ref={heroTextRef} className="flex flex-col gap-6">
             <span className="font-space text-left text-[116px] font-black uppercase tracking-[-0.02em] leading-[0.88] text-white pts-shadow">
               <span className="block pts-line text-[#111317]" data-text="Product.">
@@ -634,14 +544,42 @@ export default function Home() {
                 alt="Website preview"
               />
             </div>
-            <div className="hero-quote mt-6 w-[min(38vw,520px)] font-space text-center text-[24px] font-semibold text-[#20242b] md:text-[24px] lg:text-[24px]">
-              <p className="leading-relaxed">“Simple can be harder than complex.”</p>
-              <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[#20242b]/80">
-                — Steve Jobs
-              </p>
-            </div>
           </div>
         </section>
+        <div className="flex w-full justify-center mt-[30px]">
+          <p
+            ref={heroHeadlineRef}
+            className="hero-flow font-space text-center text-[18px] font-semibold text-[#111317] uppercase md:text-[18px] lg:text-[18px] text-shadow-sm"
+          >
+            Building software where{" "}
+            <span className="gradient-wave">strategy</span> and{" "}
+            <span className="gradient-wave">engineering</span> move in sync.
+          </p>
+        </div>
+        <div className="flex w-full justify-center">
+          <div className="icon-row icon-row--dividers">
+            <span className="icon-chip">
+              <HeartHandshake className="icon-svg" />
+              <span className="icon-label">Collab</span>
+            </span>
+            <span className="icon-chip">
+              <BadgeCheck className="icon-svg" />
+              <span className="icon-label">Quality</span>
+            </span>
+            <span className="icon-chip">
+              <Users className="icon-svg" />
+              <span className="icon-label">Leadership</span>
+            </span>
+            <span className="icon-chip">
+              <Lightbulb className="icon-svg" />
+              <span className="icon-label">Insight</span>
+            </span>
+            <span className="icon-chip">
+              <Rocket className="icon-svg" />
+              <span className="icon-label">Ship</span>
+            </span>
+          </div>
+        </div>
 
         <section
           id="about"
@@ -771,9 +709,13 @@ export default function Home() {
           </div>
         </section>
       </main>
+      <ChevronDown
+        className={`scroll-hint-fixed${showScrollHint ? "" : " scroll-hint-hidden"}`}
+        aria-hidden="true"
+      />
 
-      <footer className="relative z-10 border-t border-[var(--line)] py-8">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 text-xs uppercase tracking-[0.22em] text-muted sm:flex-row sm:items-center sm:justify-between">
+      <footer className="relative z-10 border-t border-[var(--line)] py-3">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-6 text-xs uppercase tracking-[0.22em] text-muted sm:flex-row sm:items-center sm:justify-between">
           <span>Copyright 2026 Gaurav Advani</span>
           <span>Product / Technology / Design</span>
         </div>
