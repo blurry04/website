@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import SkillsTicker from "./components/SkillsTicker";
 import ImpactExperience from "./components/ImpactExperience";
+import AboutCarousel3D from "./components/AboutCarousel3D";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -65,6 +66,7 @@ export default function Home() {
     ],
     []
   );
+
 
   useEffect(() => {
     let scrollTimer: ReturnType<typeof setTimeout> | null = null;
@@ -546,7 +548,24 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <div className="flex w-full justify-center mt-[30px]">
+        <div className="-mt-[12px] flex w-full justify-center">
+          <svg
+            className="react-icon react-spin text-[#5f6772]"
+            viewBox="-11.5 -10.23174 23 20.46348"
+            width="20"
+            height="20"
+            role="img"
+            aria-label="React"
+          >
+            <g fill="none" stroke="currentColor" strokeWidth="1.5">
+              <ellipse rx="11" ry="4.2" />
+              <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+              <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+            </g>
+            <circle r="2" fill="currentColor" />
+          </svg>
+        </div>
+        <div className="-mt-[12px] flex w-full justify-center">
           <p
             ref={heroHeadlineRef}
             className="hero-flow font-space text-center text-[18px] font-semibold text-[#111317] uppercase md:text-[18px] lg:text-[18px] text-shadow-sm headline-shadow"
@@ -582,49 +601,25 @@ export default function Home() {
           </div>
         </div>
 
-        <section
-          id="about"
-          className="scroll-reveal grid gap-6 lg:grid-cols-[0.8fr_1.2fr]"
-        >
-          <div className="surface-card rounded-3xl p-7">
-            <p className="section-eyebrow">About</p>
-            <h2 className="heading-2 mt-4">
-              Blending product vision with technical depth.
-            </h2>
-            <p className="body-md mt-4">
-              I thrive at the intersection of business clarity and technical execution - mapping
-              complex requirements into roadmap-ready plans, shaping UX flows, and partnering
-              with engineering teams to deliver premium product experiences.
-            </p>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {[
-              {
-                title: "PM + Strategy",
-                detail:
-                  "Roadmap planning, stakeholder alignment, market research, and KPI-driven prioritization.",
-              },
-              {
-                title: "Technical Execution",
-                detail:
-                  "Full-stack execution with modern web stacks, API integrations, and system migrations.",
-              },
-              {
-                title: "Design Collaboration",
-                detail:
-                  "Figma prototypes, human-centered UX, and accessibility-first flows for global teams.",
-              },
-              {
-                title: "Operations",
-                detail:
-                  "QA validation, release coordination, and production reliability support.",
-              },
-            ].map((item) => (
-              <div key={item.title} className="surface-card rounded-2xl p-5">
-                <h3 className="heading-3">{item.title}</h3>
-                <p className="body-md mt-2">{item.detail}</p>
-              </div>
-            ))}
+        <section id="about" className="scroll-reveal grid gap-6">
+          <div className="grid gap-10 lg:grid-cols-[30%_70%] lg:items-stretch">
+            <div>
+              <p className="text-[16px] font-semibold uppercase tracking-[0.4em] text-[#5f6772] drop-shadow-[0_4px_12px_rgba(32,36,43,0.18)]">
+                BUILT WITH INTENT
+              </p>
+              <p className="mt-5 text-[15px] leading-relaxed text-[#5f6772]">
+                I work at the intersection of product clarity and technical execution, translating ambiguity into structured direction and scalable systems.
+              </p>
+              <p className="mt-4 text-[15px] leading-relaxed text-[#5f6772]">
+                From roadmap planning to full-stack implementation, I focus on aligning teams around what matters and executing with precision.
+              </p>
+              <p className="mt-4 text-[15px] leading-relaxed text-[#5f6772]">
+                The edge isn’t motion for the sake of progress; it’s clarity in decision-making and discipline in delivery.
+              </p>
+            </div>
+            <div className="lg:pt-7 h-full">
+              <AboutCarousel3D />
+            </div>
           </div>
         </section>
 
