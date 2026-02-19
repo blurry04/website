@@ -360,10 +360,38 @@ export default function Home() {
   useEffect(() => {
     const sections = Array.from(
       document.querySelectorAll<HTMLElement>("section[id]")
-    );
+    ).filter((section) => section.id !== "home");
     if (sections.length === 0) {
       return;
     }
+
+    const pickBestSection = () => {
+      let bestId = "";
+      let bestArea = 0;
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+      const viewportWidth =
+        window.innerWidth || document.documentElement.clientWidth;
+
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        const visibleHeight = Math.max(
+          0,
+          Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0)
+        );
+        const visibleWidth = Math.max(
+          0,
+          Math.min(rect.right, viewportWidth) - Math.max(rect.left, 0)
+        );
+        const area = visibleHeight * visibleWidth;
+        if (area > bestArea) {
+          bestArea = area;
+          bestId = `#${section.id}`;
+        }
+      });
+
+      return bestId;
+    };
 
     const lastEntries = new Map<Element, IntersectionObserverEntry>();
 
@@ -375,20 +403,9 @@ export default function Home() {
         }
         entries.forEach((entry) => lastEntries.set(entry.target, entry));
 
-        let best: IntersectionObserverEntry | null = null;
-        let bestArea = 0;
-
-        for (const entry of lastEntries.values()) {
-          if (!entry.isIntersecting) continue;
-          const area = entry.intersectionRect.width * entry.intersectionRect.height;
-          if (area > bestArea) {
-            bestArea = area;
-            best = entry;
-          }
-        }
-
-        if (best?.target && (best.target as HTMLElement).id) {
-          setActiveSection(`#${(best.target as HTMLElement).id}`);
+        const bestId = pickBestSection();
+        if (bestId) {
+          setActiveSection(bestId);
         }
       },
       {
@@ -412,6 +429,12 @@ export default function Home() {
 
       if (scrolled >= maxScroll - 2) {
         setActiveSection("#contact");
+        return;
+      }
+
+      const bestId = pickBestSection();
+      if (bestId) {
+        setActiveSection(bestId);
       }
     };
 
@@ -425,7 +448,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="page-bg min-h-screen text-[15px]">
+    <section id="home" className="page-bg text-[15px]">
       <div className="mouse-glow" ref={glowRef} aria-hidden="true" />
       <div className="ambient-glow" aria-hidden="true" />
       <div className="fluid-compare" aria-hidden="true">
@@ -514,7 +537,7 @@ export default function Home() {
         )}
       </header>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-8 pt-[20px]">
+      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-2 pt-[20px]">
         <div className="flex w-full justify-center">
           <span className="status-pill status-pill--header">
             <span className="status-dot" aria-hidden="true" />
@@ -672,7 +695,7 @@ export default function Home() {
 
         <section
           id="contact"
-          className="scroll-reveal grid gap-6 rounded-3xl border border-[var(--line)] bg-white/80 p-8"
+          className="terminal-section scroll-reveal grid gap-6 rounded-3xl border border-[var(--line)] bg-white/80 p-8"
         >
           <div className="flex flex-col gap-3">
             <p className="section-eyebrow">Contact</p>
@@ -709,13 +732,6 @@ export default function Home() {
         className={`scroll-hint-fixed${showScrollHint ? "" : " scroll-hint-hidden"}`}
         aria-hidden="true"
       />
-
-      <footer className="relative z-10 border-t border-[var(--line)] py-3">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-6 text-xs uppercase tracking-[0.22em] text-muted sm:flex-row sm:items-center sm:justify-between">
-          <span>Copyright 2026 Gaurav Advani</span>
-          <span>Product / Technology / Design</span>
-        </div>
-      </footer>
-    </div>
+    </section>
   );
 }

@@ -1,19 +1,12 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
-
-type Metric = { value: string; label: string };
+import { useEffect, useMemo, useRef, useState } from "react";
 type ImpactPanel = {
   company: string;
   role: string;
   date: string;
   headline: string;
-  metrics: Metric[];
-  bullets: string[];
+  bullets?: string[];
   chips?: string[];
 };
 
@@ -22,278 +15,200 @@ const PANELS: ImpactPanel[] = [
     company: "EmpoweRx",
     role: "Product Manager (Technical)",
     date: "2024",
-    headline: "Led product strategy and data tooling for wage insights.",
-    metrics: [
-      { value: "6+", label: "Cross-functional partners" },
-      { value: "3", label: "Core product streams" },
-      { value: "1", label: "County-level data engine" },
-    ],
-    bullets: [
-      "Built a Market Analysis Tool powered by BLS data pipelines.",
-      "Aligned stakeholders on roadmap, scope, and delivery milestones.",
-      "Migrated AWS and GitHub systems from vendors to in-house.",
-    ],
+    headline:
+      "Built wage intelligence and market analytics infrastructure to turn complex labor data into actionable product insights.",
     chips: ["Strategy", "Data", "Delivery"],
   },
   {
+    company: "Northeastern University",
+    role: "Graduate Teaching Assistant",
+    date: "2023–2024",
+    headline:
+      "Supported foundational AI/ML instruction through labs, office hours, and structured feedback on applied coursework.",
+    chips: ["Teaching", "Evaluation", "Systems Thinking"],
+  },
+  {
     company: "Ekahal",
-    role: "Full-Stack Developer",
-    date: "2023",
-    headline: "Modernized dashboards and improved performance across the app.",
-    metrics: [
-      { value: "20%", label: "Faster load times" },
-      { value: "10%", label: "Higher engagement" },
-      { value: "5+", label: "Core UI modules" },
-    ],
-    bullets: [
-      "Revamped dashboards with React and Bootstrap 5.",
-      "Refactored legacy components for speed and clarity.",
-      "Partnered with design on UX improvements.",
-    ],
-    chips: ["React", "UI/UX", "Performance"],
-  },
-  {
-    company: "KritexCo",
-    role: "Web Developer",
+    role: "Frontend Engineer",
     date: "2022",
-    headline: "Built responsive web experiences and optimized conversion flows.",
-    metrics: [
-      { value: "15%", label: "Lower bounce rate" },
-      { value: "3", label: "Landing pages shipped" },
-      { value: "2", label: "A/B test cycles" },
-    ],
-    bullets: [
-      "Created responsive landing pages for growth campaigns.",
-      "Delivered React UI components with rapid iterations.",
-      "Improved copy + layout for higher conversions.",
-    ],
-    chips: ["Web", "Growth", "Experiments"],
+    headline:
+      "Modernized core dashboards and workflows to improve usability, performance, and clarity across the product.",
+    chips: ["UX", "Performance", "React"],
   },
   {
-    company: "Studio Work",
-    role: "Product Builder",
-    date: "2021–2024",
-    headline: "Shipped end-to-end prototypes from signal to launch.",
-    metrics: [
-      { value: "12+", label: "Projects built" },
-      { value: "35+", label: "Features shipped" },
-      { value: "4", label: "Product lines" },
-    ],
-    bullets: [
-      "End-to-end ownership from discovery to launch.",
-      "Balanced roadmap scope with engineering feasibility.",
-      "Delivered polished demos and product narratives.",
-    ],
-    chips: ["Product", "Delivery", "Systems"],
+    company: "Kritexco",
+    role: "Frontend Developer",
+    date: "2022",
+    headline:
+      "Delivered landing pages and client portal experiences focused on conversion, clarity, and maintainable UI systems.",
+    chips: ["UI", "A/B Testing", "Deployment"],
+  },
+  {
+    company: "Travassa Holidays",
+    role: "Marketing Lead",
+    date: "2021",
+    headline:
+      "Led multi-city experiential programs with partner coordination and logistics to scale high‑touch travel events.",
+    chips: ["Logistics", "Partnerships", "Growth"],
+  },
+  {
+    company: "Rotaract Club (TSEC)",
+    role: "Secretary & PR Director",
+    date: "2020–2021",
+    headline:
+      "Drove operations and public relations initiatives to grow community engagement and deliver structured programs.",
+    chips: ["Governance", "Brand", "Execution"],
   },
 ];
 
 export default function ImpactExperience() {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const viewportRef = useRef<HTMLDivElement | null>(null);
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const panelRefs = useRef<HTMLDivElement[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(false);
-
   const panels = useMemo(() => PANELS, []);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const cardRefs = useRef<HTMLDivElement[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  }, []);
+    const track = trackRef.current;
+    if (!track) return;
 
-  useLayoutEffect(() => {
-    if (typeof window === "undefined") return;
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) return;
-
-    const ctx = gsap.context(() => {
-      const section = sectionRef.current;
-      const viewport = viewportRef.current;
-      const track = trackRef.current;
-      if (!section || !viewport || !track) return;
-
-      const getMaxTranslate = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
-
-      const tween = gsap.to(track, {
-        x: () => -getMaxTranslate(),
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: () => `+=${getMaxTranslate()}`,
-          scrub: 1,
-          pin: viewport,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
+    const handleScroll = () => {
+      const center = track.scrollLeft + track.clientWidth / 2;
+      let next = 0;
+      let min = Number.POSITIVE_INFINITY;
+      cardRefs.current.forEach((card, idx) => {
+        const offset = card.offsetLeft + card.offsetWidth / 2;
+        const dist = Math.abs(offset - center);
+        if (dist < min) {
+          min = dist;
+          next = idx;
+        }
       });
+      setActiveIndex(next);
+    };
 
-      const applyActive = () => {
-        const center = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
-        let next = 0;
-        let min = Number.POSITIVE_INFINITY;
-        panelRefs.current.forEach((panel, idx) => {
-          const rect = panel.getBoundingClientRect();
-          const dist = Math.abs(rect.left + rect.width / 2 - center);
-          if (dist < min) {
-            min = dist;
-            next = idx;
-          }
-        });
-        setActiveIndex(next);
-      };
+    track.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
 
-      ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        end: () => `+=${getMaxTranslate()}`,
-        scrub: true,
-        onUpdate: applyActive,
-      });
+    return () => {
+      track.removeEventListener("scroll", handleScroll);
+    };
+  }, [panels.length]);
 
-      panelRefs.current.forEach((panel) => {
-        gsap.set(panel, { opacity: 0.6, scale: 0.98 });
-      });
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track || isPaused) return;
 
-      ScrollTrigger.addEventListener("refresh", applyActive);
-      applyActive();
+    const id = window.setInterval(() => {
+      const next = (activeIndex + 1) % panels.length;
+      const nextCard = cardRefs.current[next];
+      if (!nextCard) return;
+      track.scrollTo({ left: nextCard.offsetLeft, behavior: "smooth" });
+    }, 10000);
 
-      return () => {
-        tween.kill();
-      };
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+    return () => window.clearInterval(id);
+  }, [activeIndex, isPaused, panels.length]);
 
   return (
     <section
       id="impact"
-      ref={sectionRef}
-      className="relative min-h-[200vh] py-10 scroll-reveal"
+      className="relative py-10 scroll-reveal w-screen mx-[calc(50%-50vw)]"
     >
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mx-auto mb-6 flex w-full max-w-7xl items-center justify-between px-6">
         <div>
           <p className="section-eyebrow">Impact</p>
-          <h2 className="heading-2 mt-2">Experience</h2>
+          <h2 className="heading-2 mt-2">The Story So Far</h2>
         </div>
-        <p className="text-xs uppercase tracking-[0.2em] text-muted">
-          Scroll to explore →
-        </p>
       </div>
 
-      {reducedMotion ? (
-        <div className="grid gap-6">
-          {panels.map((panel) => (
-            <div
-              key={panel.company}
-              className="flex flex-col gap-6 rounded-[18px] border border-[var(--line)] bg-[var(--card)] p-7 shadow-[0_20px_40px_rgba(32,36,43,0.08)]"
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-y-0 left-0 right-0 top-1/2 hidden -translate-y-1/2 border-t border-[var(--line)] lg:block" />
+        <div
+          ref={trackRef}
+          className="flex snap-x snap-mandatory gap-6 overflow-x-hidden pb-6 pt-4 touch-pan-y px-6"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
+        >
+        {panels.map((panel, index) => (
+          <article
+            key={panel.company}
+            ref={(el) => {
+              if (el) cardRefs.current[index] = el;
+            }}
+              className="relative w-[92vw] max-w-5xl flex-none snap-center overflow-hidden rounded-[28px] border border-[var(--line)] bg-[var(--card)] text-[var(--ink)] shadow-[0_20px_50px_rgba(32,36,43,0.12)]"
             >
-              <div className="text-sm text-muted">
-                {panel.company} • {panel.role} • {panel.date}
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--ink)]">
-                {panel.headline}
-              </h3>
-              <div className="grid gap-4 sm:grid-cols-3">
-                {panel.metrics.map((metric) => (
-                  <div key={metric.label}>
-                    <p className="text-2xl font-semibold text-[var(--ink)]">
-                      {metric.value}
+              <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_90%_20%,rgba(47,126,104,0.16)_0%,rgba(236,238,241,0.7)_55%,rgba(246,247,249,0.95)_100%)]" />
+              <div className="relative grid gap-10 p-8 lg:grid-cols-[1.1fr_0.9fr] lg:p-10">
+                <div className="flex flex-col gap-6">
+                  <span className="text-[12px] uppercase tracking-[0.45em] text-muted">
+                    {panel.company}
+                  </span>
+                  <h3 className="text-[36px] font-semibold leading-tight text-[var(--ink)] sm:text-[44px]">
+                    {panel.role}
+                  </h3>
+                  <p className="max-w-[45ch] text-[15px] leading-relaxed text-[var(--ink)]/75 sm:text-[16px]">
+                    {panel.headline}
+                  </p>
+                  {panel.chips && (
+                    <p className="text-[12px] uppercase tracking-[0.35em] text-muted">
+                      {panel.chips.join(" · ")}
                     </p>
-                    <p className="text-xs uppercase tracking-[0.16em] text-muted">
-                      {metric.label}
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-6">
+                  {((panel.bullets && panel.bullets.length > 0) ||
+                    (panel.chips && panel.chips.length > 0)) && (
+                    <div>
+                    <p className="text-[12px] uppercase tracking-[0.4em] text-muted">
+                      Key Focus
                     </p>
-                  </div>
-                ))}
-              </div>
-              <ul className="grid gap-2 text-sm text-[var(--ink)]">
-                {panel.bullets.map((bullet) => (
-                  <li key={bullet} className="flex gap-2">
-                    <span className="text-accent">-</span>
-                    <span>{bullet}</span>
-                  </li>
-                ))}
-              </ul>
-              {panel.chips && (
-                <div className="flex flex-wrap gap-2">
-                  {panel.chips.map((chip) => (
-                    <span
-                      key={chip}
-                      className="rounded-full border border-[var(--line)] bg-white/70 px-3 py-1 text-xs uppercase tracking-[0.14em] text-muted"
-                    >
-                      {chip}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div ref={viewportRef} className="relative overflow-hidden">
-          <div
-            ref={trackRef}
-            className="flex items-stretch gap-8 px-6 py-8"
-          >
-            {panels.map((panel, index) => (
-              <div
-                key={`${panel.company}-${index}`}
-                ref={(el) => {
-                  if (el) panelRefs.current[index] = el;
-                }}
-                className={`flex w-[80vw] max-w-[900px] flex-col gap-6 rounded-[18px] border border-[var(--line)] bg-[var(--card)] p-7 shadow-[0_20px_40px_rgba(32,36,43,0.08)] transition duration-300 ${
-                  activeIndex === index ? "opacity-100 scale-100" : "opacity-60 scale-[0.98]"
-                }`}
-              >
-                <div className="text-sm text-muted">
-                  {panel.company} • {panel.role} • {panel.date}
-                </div>
-                <h3 className="text-lg font-semibold text-[var(--ink)]">
-                  {panel.headline}
-                </h3>
-                <div className="grid gap-4 sm:grid-cols-3">
-                  {panel.metrics.map((metric) => (
-                    <div key={metric.label}>
-                      <p className="text-2xl font-semibold text-[var(--ink)]">
-                        {metric.value}
-                      </p>
-                      <p className="text-xs uppercase tracking-[0.16em] text-muted">
-                        {metric.label}
-                      </p>
+                    <div className="mt-4 grid gap-3 text-[14px] text-[var(--ink)]/75">
+                      {(panel.bullets && panel.bullets.length > 0
+                        ? panel.bullets
+                        : panel.chips ?? []
+                      ).map((bullet) => (
+                        <div key={bullet} className="flex gap-3">
+                          <span className="mt-2 h-1 w-5 rounded-full bg-[var(--accent)]" />
+                          <span>{bullet}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-                <ul className="grid gap-2 text-sm text-[var(--ink)]">
-                  {panel.bullets.map((bullet) => (
-                    <li key={bullet} className="flex gap-2">
-                      <span className="text-accent">-</span>
-                      <span>{bullet}</span>
-                    </li>
-                  ))}
-                </ul>
-                {panel.chips && (
-                  <div className="flex flex-wrap gap-2">
-                    {panel.chips.map((chip) => (
-                      <span
-                        key={chip}
-                        className="rounded-full border border-[var(--line)] bg-white/70 px-3 py-1 text-xs uppercase tracking-[0.14em] text-muted"
-                      >
-                        {chip}
-                      </span>
-                    ))}
                   </div>
                 )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
-      <div className="mt-4 text-sm text-muted">
-        {String(activeIndex + 1).padStart(2, "0")} / {String(panels.length).padStart(2, "0")}
+                <div className="flex items-center gap-4">
+                    <span className="text-[12px] uppercase tracking-[0.35em] text-muted">
+                      Timeline
+                    </span>
+                    <span className="text-[13px] uppercase tracking-[0.22em] text-[var(--ink)]/70">
+                      {panel.date}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <span className="pointer-events-none absolute bottom-6 right-8 text-[120px] font-semibold text-[var(--ink)]/5">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-2 flex items-center justify-center gap-1.5">
+          {panels.map((_, idx) => (
+            <span
+              key={`dot-${idx}`}
+              className={`h-1 w-4 rounded-full transition ${
+                idx === activeIndex
+                  ? "bg-[rgba(32,36,43,0.28)]"
+                  : "bg-[rgba(32,36,43,0.12)]"
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

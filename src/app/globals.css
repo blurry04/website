@@ -13,12 +13,16 @@
 html,
 body {
   height: 100%;
-  scroll-behavior: smooth;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
   -ms-overflow-style: none;
   scrollbar-width: none;
+  margin: 0;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body::-webkit-scrollbar {
@@ -33,10 +37,21 @@ body {
   font-family: "Satoshi", var(--font-sans), system-ui, sans-serif;
   text-rendering: optimizeLegibility;
   min-height: 100vh;
+  margin: 0;
 }
 
 section[id] {
   scroll-margin-top: 96px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --footer-offset: 88px;
+  }
+}
+
+.terminal-section {
+  min-height: calc(100svh - var(--header-offset) - var(--footer-offset));
 }
 
 .font-display {
@@ -484,6 +499,7 @@ section[id] {
   --muted: #5f6772;
   --line: #d8dde3;
   --card: #f6f7f9;
+  --footer-offset: 64px;
 }
 
 ::selection {
@@ -491,7 +507,6 @@ section[id] {
 }
 
 .page-bg {
-  position: relative;
   --header-offset: 96px;
   background: #eceef1;
 }
