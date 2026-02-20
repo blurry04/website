@@ -16,19 +16,20 @@ import {
   Users,
   Workflow,
 } from "lucide-react";
-import SkillsTicker from "./components/SkillsTicker";
-import ImpactExperience from "./components/ImpactExperience";
-import AboutCarousel3D from "./components/AboutCarousel3D";
+import HeaderNav from "./components/HeaderNav";
+import AboutSection from "./components/AboutSection";
+import ImpactSection from "./components/ImpactSection";
+import SkillsSection from "./components/SkillsSection";
+import EducationSection from "./components/EducationSection";
+import ContactSection from "./components/ContactSection";
+import { ActiveSectionProvider } from "./components/ActiveSectionContext";
+import SectionFocus from "./components/SectionFocus";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("#about");
   const [metricIndex, setMetricIndex] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
-  const navRef = useRef<HTMLDivElement | null>(null);
-  const measureRef = useRef<HTMLDivElement | null>(null);
   const heroRef = useRef<HTMLDivElement | null>(null);
   const glowRef = useRef<HTMLDivElement | null>(null);
   const slotRefs = useRef<HTMLDivElement[]>([]);
@@ -39,19 +40,6 @@ export default function Home() {
   const heroBgRef = useRef<HTMLDivElement | null>(null);
   const meshRef = useRef<HTMLDivElement | null>(null);
 
-  const heroImage = "/Confident%20style%20and%20charm.png";
-
-  const navItems = useMemo(
-    () => [
-      { label: "About", href: "#about" },
-      { label: "Impact", href: "#impact" },
-      { label: "Skills", href: "#skills" },
-      { label: "Education", href: "#education" },
-      { label: "Contact", href: "#contact" },
-    ],
-    []
-  );
-  const [visibleCount, setVisibleCount] = useState(navItems.length);
 
   const heroMetrics = useMemo(
     () => [
@@ -171,47 +159,6 @@ export default function Home() {
     return () => window.removeEventListener("mousemove", handleMove);
   }, []);
 
-  useEffect(() => {
-    const gap = 24;
-    const hamburgerSpace = 44;
-
-    const evaluate = () => {
-      if (!navRef.current || !measureRef.current) {
-        return;
-      }
-      const available = navRef.current.getBoundingClientRect().width;
-      const items = Array.from(measureRef.current.children) as HTMLElement[];
-      let used = 0;
-      let count = 0;
-
-      for (let i = 0; i < items.length; i += 1) {
-        const width = items[i].offsetWidth;
-        const nextUsed = used === 0 ? width : used + gap + width;
-        const reserve = i < items.length - 1 ? hamburgerSpace : 0;
-        if (nextUsed + reserve <= available) {
-          used = nextUsed;
-          count = i + 1;
-        } else {
-          break;
-        }
-      }
-      setVisibleCount(count);
-      if (count === items.length) {
-        setMenuOpen(false);
-      }
-    };
-
-    evaluate();
-    const resizeObserver = new ResizeObserver(evaluate);
-    if (navRef.current) {
-      resizeObserver.observe(navRef.current);
-    }
-    window.addEventListener("resize", evaluate);
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", evaluate);
-    };
-  }, [navItems.length]);
 
   useEffect(() => {
     if (!heroRef.current) {
@@ -357,381 +304,131 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const sections = Array.from(
-      document.querySelectorAll<HTMLElement>("section[id]")
-    ).filter((section) => section.id !== "home");
-    if (sections.length === 0) {
-      return;
-    }
-
-    const pickBestSection = () => {
-      let bestId = "";
-      let bestArea = 0;
-      const viewportHeight =
-        window.innerHeight || document.documentElement.clientHeight;
-      const viewportWidth =
-        window.innerWidth || document.documentElement.clientWidth;
-
-      sections.forEach((section) => {
-        const rect = section.getBoundingClientRect();
-        const visibleHeight = Math.max(
-          0,
-          Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0)
-        );
-        const visibleWidth = Math.max(
-          0,
-          Math.min(rect.right, viewportWidth) - Math.max(rect.left, 0)
-        );
-        const area = visibleHeight * visibleWidth;
-        if (area > bestArea) {
-          bestArea = area;
-          bestId = `#${section.id}`;
-        }
-      });
-
-      return bestId;
-    };
-
-    const lastEntries = new Map<Element, IntersectionObserverEntry>();
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (window.scrollY <= 0) {
-          setActiveSection("");
-          return;
-        }
-        entries.forEach((entry) => lastEntries.set(entry.target, entry));
-
-        const bestId = pickBestSection();
-        if (bestId) {
-          setActiveSection(bestId);
-        }
-      },
-      {
-        threshold: [0, 0.25, 0.5, 0.75, 1],
-        rootMargin: "-96px 0px 0px 0px",
-      }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-
-    const handleScrollEdge = () => {
-      const scrolled = Math.round(window.scrollY);
-      const maxScroll = Math.round(
-        document.documentElement.scrollHeight - window.innerHeight
-      );
-
-      if (scrolled <= 0) {
-        setActiveSection("");
-        return;
-      }
-
-      if (scrolled >= maxScroll - 2) {
-        setActiveSection("#contact");
-        return;
-      }
-
-      const bestId = pickBestSection();
-      if (bestId) {
-        setActiveSection(bestId);
-      }
-    };
-
-    window.addEventListener("scroll", handleScrollEdge, { passive: true });
-    handleScrollEdge();
-
-    return () => {
-      window.removeEventListener("scroll", handleScrollEdge);
-      observer.disconnect();
-    };
-  }, []);
-
+  const scrollRef = useRef<HTMLDivElement | null>(null);
   return (
-    <section id="home" className="page-bg text-[15px]">
+    <div className="page-bg text-[15px]">
       <div className="mouse-glow" ref={glowRef} aria-hidden="true" />
       <div className="ambient-glow" aria-hidden="true" />
       <div className="fluid-compare" aria-hidden="true">
         <div className="fluid-half fluid-mesh" ref={meshRef} />
       </div>
-      <header className="site-header sticky top-0 z-20">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-6 px-6 pb-4 pt-6">
-          <div className="flex flex-none items-center justify-start gap-3">
-            <img
-              className="header-avatar"
-              src={heroImage}
-              alt="Gaurav portrait"
-            />
-            <div className="leading-none name-block">
-              <p className="name-text font-name whitespace-nowrap text-base font-semibold tracking-[0.06em] text-[var(--ink)]">
-                GAURAV ADVANI
-              </p>
-              <div className="title-marquee">
-                <span className="title-marquee__track">
-                  AI/ML · Full Stack · Product · Strategy · UI/UX
+      <ActiveSectionProvider
+        sectionIds={["home", "about", "impact", "skills", "education", "contact"]}
+      >
+        <HeaderNav />
+
+        <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-2 pt-[20px]">
+          <SectionFocus id="home" disableFocus>
+            <div className="min-h-[80vh] flex flex-col justify-between">
+              <div className="flex w-full justify-center">
+                <span className="status-pill status-pill--header">
+                  <span className="status-dot" aria-hidden="true" />
+                  OPEN TO PRODUCT AND TECH
                 </span>
               </div>
-            </div>
-          </div>
-          <div
-            ref={navRef}
-            className="nav-links flex min-w-0 flex-1 items-center justify-end gap-6 text-xs uppercase font-medium tracking-[0.26em]"
-          >
-            {navItems.slice(0, visibleCount).map((item) => (
-              <a
-                key={item.label}
-                className={`transition hover:text-[var(--ink)] ${
-                  activeSection === item.href ? "nav-active" : ""
-                }`}
-                href={item.href}
-              >
-                {item.label}
-              </a>
-            ))}
-            {visibleCount < navItems.length && (
-              <button
-                type="button"
-                aria-expanded={menuOpen}
-                aria-label="Toggle navigation"
-                onClick={() => setMenuOpen((prev) => !prev)}
-                className="inline-flex items-center text-muted transition hover:text-[var(--ink)]"
-              >
-                <span className="flex h-3 w-4 flex-col justify-between">
-                  <span className="h-[2px] w-full rounded bg-[currentColor]" />
-                  <span className="h-[2px] w-full rounded bg-[currentColor]" />
-                  <span className="h-[2px] w-full rounded bg-[currentColor]" />
-                </span>
-              </button>
-            )}
-          </div>
-        </div>
-        <div
-          ref={measureRef}
-          className="pointer-events-none absolute -top-24 left-0 flex gap-6 opacity-0"
-          aria-hidden="true"
-        >
-          {navItems.map((item) => (
-            <span key={item.label} className="text-sm uppercase tracking-[0.26em]">
-              {item.label}
-            </span>
-          ))}
-        </div>
-        {menuOpen && visibleCount < navItems.length && (
-          <div className="mx-auto flex w-full max-w-7xl justify-end px-6 pb-6">
-            <div className="surface-card w-[240px] rounded-2xl p-4 text-xs uppercase tracking-[0.24em] text-muted shadow-lg">
-              <div className="grid gap-3">
-                {navItems.slice(visibleCount).map((item) => (
-                  <a
-                    key={item.label}
-                    className="flex items-center justify-between border-b border-[var(--line)] pb-2 last:border-none last:pb-0 hover:text-[var(--ink)]"
-                    href={item.href}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {item.label}
-                    <span className="text-muted">→</span>
-                  </a>
-                ))}
+              <div className="grid gap-10 pt-0 lg:grid-cols-[1.25fr_0.75fr] lg:items-stretch">
+                <div ref={heroTextRef} className="flex flex-col gap-6">
+                  <span className="font-space text-left text-[116px] font-black uppercase tracking-[-0.02em] leading-[0.88] text-white pts-shadow">
+                    <span className="block pts-line text-[#111317]" data-text="Product.">
+                      Product<span className="pts-dot">.</span>
+                    </span>
+                    <span className="block pts-line" data-text="Systems.">
+                      Systems<span className="pts-dot">.</span>
+                    </span>
+                    <span className="block pts-line text-[#4B5D7A]" data-text="Scale.">
+                      Scale<span className="pts-dot">.</span>
+                    </span>
+                  </span>
+                </div>
+                <div
+                  ref={heroRef}
+                  className="hero-media flex flex-col items-center justify-start gap-6"
+                >
+                  <div className="hero-image-wrap hero-image-wrap--line">
+                    <img
+                      className="hero-editorial-image"
+                      src="/website.png"
+                      alt="Website preview"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="-mt-[12px] flex w-full justify-center">
+                <svg
+                  className="react-icon react-spin text-[#5f6772]"
+                  viewBox="-11.5 -10.23174 23 20.46348"
+                  width="20"
+                  height="20"
+                  role="img"
+                  aria-label="React"
+                >
+                  <g fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <ellipse rx="11" ry="4.2" />
+                    <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+                    <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+                  </g>
+                  <circle r="2" fill="currentColor" />
+                </svg>
+              </div>
+              <div className="-mt-[12px] flex w-full justify-center">
+                <p
+                  ref={heroHeadlineRef}
+                  className="hero-flow font-space text-center text-[18px] font-semibold text-[#111317] uppercase md:text-[18px] lg:text-[18px] text-shadow-sm headline-shadow"
+                >
+                  Building software where{" "}
+                  <span className="gradient-wave">strategy</span>{" "}
+                  <span className="headline-and">and</span>{" "}
+                  <span className="gradient-wave">engineering</span> move in sync.
+                </p>
+              </div>
+              <div className="flex w-full justify-center">
+                <div className="icon-row icon-row--dividers">
+                  <span className="icon-chip">
+                    <HeartHandshake className="icon-svg" />
+                    <span className="icon-label">Collab</span>
+                  </span>
+                  <span className="icon-chip">
+                    <BadgeCheck className="icon-svg" />
+                    <span className="icon-label">Quality</span>
+                  </span>
+                  <span className="icon-chip">
+                    <Users className="icon-svg" />
+                    <span className="icon-label">Leadership</span>
+                  </span>
+                  <span className="icon-chip">
+                    <Lightbulb className="icon-svg" />
+                    <span className="icon-label">Insight</span>
+                  </span>
+                  <span className="icon-chip">
+                    <Rocket className="icon-svg" />
+                    <span className="icon-label">Ship</span>
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </header>
+          </SectionFocus>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-2 pt-[20px]">
-        <div className="flex w-full justify-center">
-          <span className="status-pill status-pill--header">
-            <span className="status-dot" aria-hidden="true" />
-            OPEN TO PRODUCT AND TECH
-          </span>
-        </div>
-        <section className="grid gap-10 pt-0 lg:grid-cols-[1.25fr_0.75fr] lg:items-stretch">
-          <div ref={heroTextRef} className="flex flex-col gap-6">
-            <span className="font-space text-left text-[116px] font-black uppercase tracking-[-0.02em] leading-[0.88] text-white pts-shadow">
-              <span className="block pts-line text-[#111317]" data-text="Product.">
-                Product<span className="pts-dot">.</span>
-              </span>
-              <span className="block pts-line" data-text="Systems.">
-                Systems<span className="pts-dot">.</span>
-              </span>
-              <span className="block pts-line text-[#4B5D7A]" data-text="Scale.">
-                Scale<span className="pts-dot">.</span>
-              </span>
-            </span>
-          </div>
-          <div
-            ref={heroRef}
-            className="hero-media flex flex-col items-center justify-start gap-6"
-          >
-            <div className="hero-image-wrap hero-image-wrap--line">
-              <img
-                className="hero-editorial-image"
-                src="/website.png"
-                alt="Website preview"
-              />
-            </div>
-          </div>
-        </section>
-        <div className="-mt-[12px] flex w-full justify-center">
-          <svg
-            className="react-icon react-spin text-[#5f6772]"
-            viewBox="-11.5 -10.23174 23 20.46348"
-            width="20"
-            height="20"
-            role="img"
-            aria-label="React"
-          >
-            <g fill="none" stroke="currentColor" strokeWidth="1.5">
-              <ellipse rx="11" ry="4.2" />
-              <ellipse rx="11" ry="4.2" transform="rotate(60)" />
-              <ellipse rx="11" ry="4.2" transform="rotate(120)" />
-            </g>
-            <circle r="2" fill="currentColor" />
-          </svg>
-        </div>
-        <div className="-mt-[12px] flex w-full justify-center">
-          <p
-            ref={heroHeadlineRef}
-            className="hero-flow font-space text-center text-[18px] font-semibold text-[#111317] uppercase md:text-[18px] lg:text-[18px] text-shadow-sm headline-shadow"
-          >
-            Building software where{" "}
-            <span className="gradient-wave">strategy</span>{" "}
-            <span className="headline-and">and</span>{" "}
-            <span className="gradient-wave">engineering</span> move in sync.
-          </p>
-        </div>
-        <div className="flex w-full justify-center">
-          <div className="icon-row icon-row--dividers">
-            <span className="icon-chip">
-              <HeartHandshake className="icon-svg" />
-              <span className="icon-label">Collab</span>
-            </span>
-            <span className="icon-chip">
-              <BadgeCheck className="icon-svg" />
-              <span className="icon-label">Quality</span>
-            </span>
-            <span className="icon-chip">
-              <Users className="icon-svg" />
-              <span className="icon-label">Leadership</span>
-            </span>
-            <span className="icon-chip">
-              <Lightbulb className="icon-svg" />
-              <span className="icon-label">Insight</span>
-            </span>
-            <span className="icon-chip">
-              <Rocket className="icon-svg" />
-              <span className="icon-label">Ship</span>
-            </span>
-          </div>
-        </div>
-
-        <section id="about" className="scroll-reveal grid gap-6">
-          <div className="grid gap-10 lg:grid-cols-[30%_70%] lg:items-stretch">
-            <div>
-              <p className="text-[16px] font-semibold uppercase tracking-[0.4em] text-[#5f6772] drop-shadow-[0_4px_12px_rgba(32,36,43,0.18)]">
-                BUILT WITH INTENT
-              </p>
-              <p className="mt-5 text-[15px] leading-relaxed text-[#5f6772]">
-                I work at the intersection of product clarity and technical execution, translating ambiguity into structured direction and scalable systems.
-              </p>
-              <p className="mt-4 text-[15px] leading-relaxed text-[#5f6772]">
-                From roadmap planning to full-stack implementation, I focus on aligning teams around what matters and executing with precision.
-              </p>
-              <p className="mt-4 text-[15px] leading-relaxed text-[#5f6772]">
-                The edge isn’t motion for the sake of progress; it’s clarity in decision-making and discipline in delivery.
-              </p>
-            </div>
-            <div className="lg:pt-7 h-full">
-              <AboutCarousel3D />
-            </div>
-          </div>
-        </section>
-
-        <ImpactExperience />
-
-        <section id="skills" className="scroll-reveal grid gap-6">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="section-eyebrow">Skills</p>
-              <h2 className="heading-2 mt-2">
-                Product strategy meets hands-on delivery.
-              </h2>
-            </div>
-          </div>
-          <SkillsTicker />
-        </section>
-
-        <section id="education" className="scroll-reveal grid gap-6">
-          <div>
-            <p className="section-eyebrow">Education</p>
-            <h2 className="heading-2 mt-2">
-              Academic foundations in computer science.
-            </h2>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="surface-card rounded-3xl p-6">
-              <p className="text-xs uppercase tracking-[0.22em] text-muted">
-                Northeastern University
-              </p>
-              <h3 className="heading-3 mt-3">
-                M.S. Computer Science
-              </h3>
-              <p className="body-md mt-2">Jan 2024 - May 2026</p>
-              <p className="body-md mt-3">
-                Algorithms, Human-Computer Interaction, Mobile App Development, Artificial
-                Intelligence, Machine Learning, Natural Language Processing.
-              </p>
-            </div>
-            <div className="surface-card rounded-3xl p-6">
-              <p className="text-xs uppercase tracking-[0.22em] text-muted">
-                Mumbai University, India
-              </p>
-              <h3 className="heading-3 mt-3">
-                Bachelor of Engineering in Computer Science
-              </h3>
-              <p className="body-md mt-2">May 2023</p>
-            </div>
-          </div>
-        </section>
-
-        <section
-          id="contact"
-          className="terminal-section scroll-reveal grid gap-6 rounded-3xl border border-[var(--line)] bg-white/80 p-8"
-        >
-          <div className="flex flex-col gap-3">
-            <p className="section-eyebrow">Contact</p>
-            <h2 className="heading-2">
-              Ready to build the next premium product experience.
-            </h2>
-            <p className="body-md">
-              Open to product management, technical PM roles, and strategic collaborations.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3 text-sm font-semibold">
-            <a
-              className="neon-button rounded-full bg-[var(--ink)] px-6 py-3 text-white transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-lg"
-              href="mailto:hello@gauravadvani.com"
-            >
-              hello@gauravadvani.com
-            </a>
-            <a
-              className="neon-button rounded-full border border-[var(--line)] px-6 py-3 text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--ink)] hover:shadow-lg"
-              href="#"
-            >
-              LinkedIn
-            </a>
-            <a
-              className="neon-button rounded-full border border-[var(--line)] px-6 py-3 text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--ink)] hover:shadow-lg"
-              href="#"
-            >
-              GitHub
-            </a>
-          </div>
-        </section>
-      </main>
+          <SectionFocus id="about">
+            <AboutSection />
+          </SectionFocus>
+          <SectionFocus id="impact" className="w-full">
+            <ImpactSection />
+          </SectionFocus>
+          <SectionFocus id="skills">
+            <SkillsSection />
+          </SectionFocus>
+          <SectionFocus id="education">
+            <EducationSection />
+          </SectionFocus>
+          <SectionFocus id="contact">
+            <ContactSection />
+          </SectionFocus>
+        </main>
+      </ActiveSectionProvider>
       <ChevronDown
         className={`scroll-hint-fixed${showScrollHint ? "" : " scroll-hint-hidden"}`}
         aria-hidden="true"
       />
-    </section>
+    </div>
   );
 }
