@@ -66,7 +66,6 @@ export default function ImpactExperience() {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<HTMLDivElement[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -95,25 +94,9 @@ export default function ImpactExperience() {
     };
   }, [panels.length]);
 
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track || isPaused) return;
-
-    const id = window.setInterval(() => {
-      const next = (activeIndex + 1) % panels.length;
-      const nextCard = cardRefs.current[next];
-      if (!nextCard) return;
-      track.scrollTo({ left: nextCard.offsetLeft, behavior: "smooth" });
-    }, 10000);
-
-    return () => window.clearInterval(id);
-  }, [activeIndex, isPaused, panels.length]);
 
   return (
-    <section
-      id="impact"
-      className="relative py-10 scroll-reveal w-screen mx-[calc(50%-50vw)]"
-    >
+    <div className="relative py-10 w-screen mx-[calc(50%-50vw)]">
       <div className="mx-auto mb-6 flex w-full max-w-7xl items-center justify-between px-6">
         <div>
           <p className="section-eyebrow">Impact</p>
@@ -126,10 +109,6 @@ export default function ImpactExperience() {
         <div
           ref={trackRef}
           className="flex snap-x snap-mandatory gap-6 overflow-x-hidden pb-6 pt-4 touch-pan-y px-6"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          onTouchStart={() => setIsPaused(true)}
-          onTouchEnd={() => setIsPaused(false)}
         >
         {panels.map((panel, index) => (
           <article
@@ -210,6 +189,6 @@ export default function ImpactExperience() {
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }
