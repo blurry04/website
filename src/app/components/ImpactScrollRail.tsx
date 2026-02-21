@@ -24,6 +24,19 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
   const [sectionHeight, setSectionHeight] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
 
+  const deriveMetrics = (item: RailItem) => {
+    const meta = item.meta ?? "";
+    const yearMatch = meta.match(/\b(19|20)\d{2}\b/);
+    const year = yearMatch ? yearMatch[0] : "Recent";
+    const tags = item.tags?.slice(0, 2) ?? [];
+    const subtitle = item.subtitle ?? "Impact";
+    return [
+      { value: year, label: "Timeline" },
+      { value: tags[0] ?? subtitle, label: "Focus" },
+      { value: tags[1] ?? "Delivery", label: "Mode" },
+    ];
+  };
+
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setReducedMotion(media.matches);
@@ -35,23 +48,55 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
   useEffect(() => {
     containerRef.current = document.body;
   }, []);
-
   useLayoutEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    const viewportEl = rail.parentElement as HTMLElement | null;
+    if (!viewportEl) return;
+
+    const endGutter = 24; // match px-6
+
     const updateMeasures = () => {
-      const rail = railRef.current;
-      if (!rail) return;
-      const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+      const viewportWidth = viewportEl.clientWidth; // visible width
       const scrollWidth = rail.scrollWidth;
+
       const max = Math.max(0, scrollWidth - viewportWidth);
-      const endPadding = 10;
-      setMaxTranslate(max + endPadding);
-      setSectionHeight((window.innerHeight || 0) + max + endPadding);
+      const total = max + endGutter;
+
+      setMaxTranslate(total);
+      setSectionHeight((window.innerHeight || 0) + total);
     };
 
     updateMeasures();
+
+    const ro = new ResizeObserver(updateMeasures);
+    ro.observe(viewportEl);
+    ro.observe(rail);
+
     window.addEventListener("resize", updateMeasures);
-    return () => window.removeEventListener("resize", updateMeasures);
+
+    return () => {
+      window.removeEventListener("resize", updateMeasures);
+      ro.disconnect();
+    };
   }, [items.length]);
+  // useLayoutEffect(() => {
+  //   const updateMeasures = () => {
+  //     const rail = railRef.current;
+  //     if (!rail) return;
+  //     const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+  //     const scrollWidth = rail.scrollWidth;
+  //     const max = Math.max(0, scrollWidth - viewportWidth);
+  //     // const endPadding = 10;
+  //     setMaxTranslate(max + endPadding);
+  //     setSectionHeight((window.innerHeight || 0) + max + endPadding);
+  //   };
+
+  //   updateMeasures();
+  //   window.addEventListener("resize", updateMeasures);
+  //   return () => window.removeEventListener("resize", updateMeasures);
+  // }, [items.length]);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -100,70 +145,119 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
             <motion.div
               ref={railRef}
               style={{ x }}
+              data-impact-rail
               className="flex h-full w-max items-start gap-6 px-6 will-change-transform"
             >
-              {items.map((item) => (
-                <article
-                  key={item.title}
-                  tabIndex={0}
-                  className="shrink-0 w-[78vw] max-w-5xl h-[420px] rounded-[28px] border border-[var(--line)] bg-[var(--card)] p-10 text-[var(--ink)] shadow-[0_20px_50px_rgba(32,36,43,0.12)] transition-[opacity,filter,transform] duration-500 ease-out focus:outline-none focus-within:opacity-100 focus-within:blur-0 focus-within:scale-100"
-                >
-                  <div className="grid h-full grid-cols-[1.05fr_0.95fr] gap-10">
-                    <div className="flex flex-col">
-                      {item.subtitle && (
-                        <p className="text-[14px] font-semibold uppercase tracking-[0.12em] text-[var(--accent)]">
-                          {item.subtitle}
-                        </p>
-                      )}
-                      <h3 className="mt-4 text-[44px] font-semibold leading-tight">
-                        {item.title}
-                      </h3>
-                      {item.meta && (
-                        <p className="mt-3 text-[13px] uppercase tracking-[0.18em] text-[var(--ink)]/60">
-                          {item.meta}
-                        </p>
-                      )}
-                      <p className="mt-6 text-[15px] leading-relaxed text-[var(--ink)]/75">
-                        {item.desc}
-                      </p>
-                    </div>
-                    <div className="flex flex-col gap-8">
-                      {item.highlights && item.highlights.length > 0 && (
+              {items.map((item) => {
+                const metrics = deriveMetrics(item);
+                const highlights = (item.highlights ?? []).slice(0, 3);
+                const tags = (item.tags ?? []).slice(0, 3);
+
+                return (
+                  <article
+                    key={item.title}
+                    tabIndex={0}
+                    data-impact-card
+                    className="relative shrink-0 w-[78vw] max-w-[900px] h-[420px] overflow-hidden rounded-[20px] border border-[var(--line)] bg-[var(--card)] px-14 py-12 text-[var(--ink)] shadow-[0_24px_60px_rgba(32,36,43,0.14)] transition-[opacity,filter,transform,box-shadow] duration-500 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50 focus-within:opacity-100 focus-within:blur-0 focus-within:scale-100 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-[0_28px_70px_rgba(32,36,43,0.18)]"
+                  >
+                    {/* Background anchor for cinematic depth */}
+                    <div className="pointer-events-none absolute -left-10 top-[-30%] h-[320px] w-[320px] rounded-full bg-[radial-gradient(circle,rgba(47,126,104,0.18)_0%,rgba(47,126,104,0.03)_55%,rgba(47,126,104,0)_70%)]" />
+
+                    <div className="relative grid h-full grid-cols-[1.4fr_0.6fr] gap-12">
+                      {/* Left column */}
+                      <div className="min-w-0 grid h-full grid-rows-[200px_92px_84px_1fr]">
+                        {/* Row 1: Identity (fixed slot) */}
                         <div>
-                          <p className="text-[12px] uppercase tracking-[0.35em] text-[var(--ink)]/60">
-                            Key Highlights
-                          </p>
-                          <ul className="mt-4 grid gap-3 text-[14px] text-[var(--ink)]/75">
-                            {item.highlights.map((highlight) => (
-                              <li key={highlight} className="flex gap-3">
-                                <span className="mt-2 h-1 w-5 rounded-full bg-[var(--accent)]" />
-                                <span>{highlight}</span>
-                              </li>
-                            ))}
-                          </ul>
+                          {item.subtitle && (
+                            <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--accent)]/80">
+                              {item.subtitle}
+                            </p>
+                          )}
+
+                          <h3
+                            title={item.title}
+                            className="mt-3 text-[56px] font-semibold leading-[1.02] overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]"
+                          >
+                            {item.title}
+                          </h3>
+
+                          {item.meta && (
+                            <p className="mt-3 text-[12px] uppercase tracking-[0.22em] text-[var(--ink)]/55 truncate">
+                              {item.meta}
+                            </p>
+                          )}
                         </div>
-                      )}
-                      {item.tags && item.tags.length > 0 && (
-                        <div>
-                          <p className="text-[12px] uppercase tracking-[0.35em] text-[var(--ink)]/60">
+
+                        {/* Row 2: Description (fixed slot; spacing belongs to the slot) */}
+                        <div className="pt-6">
+                          <p
+                            title={item.desc}
+                            className="max-w-[40ch] text-[16px] leading-relaxed text-[var(--ink)]/75 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]"
+                          >
+                            {item.desc}
+                          </p>
+                        </div>
+
+                        {/* Row 3: Metrics (fixed slot) */}
+                        <div className="grid grid-cols-3 gap-6">
+                          {metrics.slice(0, 3).map((metric) => (
+                            <div key={metric.label} className="min-w-0">
+                              <p className="text-[18px] font-semibold text-[var(--ink)] truncate">
+                                {metric.value}
+                              </p>
+                              <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-[var(--ink)]/55 truncate">
+                                {metric.label}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Row 4: Spacer */}
+                        <div />
+                      </div>
+
+                      {/* Right column */}
+                      <div className="min-w-0 flex h-full flex-col">
+                        <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--ink)]/55">
+                          Key Highlights
+                        </p>
+
+                        {/* Highlights fill available space; consistent rhythm */}
+                        <ul className="mt-4 flex-1 space-y-4 overflow-hidden text-[14px] text-[var(--ink)]/75">
+                          {highlights.map((highlight) => (
+                            <li key={highlight} className="flex min-w-0 gap-3">
+                              <span className="mt-[9px] h-1 w-5 shrink-0 rounded-full bg-[var(--accent)]/90" />
+                              <span className="min-w-0 truncate">{highlight}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        {/* Technologies pinned to bottom; prevent wrap-induced wobble */}
+                        <div className="mt-6">
+                          <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--ink)]/55">
                             Technologies
                           </p>
-                          <div className="mt-4 flex flex-wrap gap-2">
-                            {item.tags.map((tag) => (
+                          <div className="mt-3 flex flex-nowrap gap-2 overflow-hidden">
+                            {tags.map((tag) => (
                               <span
                                 key={tag}
-                                className="rounded-full border border-[var(--line)] px-3 py-1 text-[12px] uppercase tracking-[0.18em] text-[var(--ink)]/70"
+                                title={tag}
+                                className="max-w-[140px] rounded-full bg-[rgba(47,126,104,0.08)] px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[var(--ink)]/70 truncate"
                               >
                                 {tag}
                               </span>
                             ))}
                           </div>
                         </div>
-                      )}
+                      </div>
                     </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                );
+              })}
+              <div
+                aria-hidden="true"
+                className="shrink-0 h-[420px] w-[40px]"
+              />
             </motion.div>
           </div>
         </div>
