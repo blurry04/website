@@ -64,7 +64,7 @@ const PANELS: ImpactPanel[] = [
 export default function ImpactExperience() {
   const panels = useMemo(() => PANELS, []);
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const cardRefs = useRef<HTMLDivElement[]>([]);
+  const cardRefs = useRef<HTMLElement[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
