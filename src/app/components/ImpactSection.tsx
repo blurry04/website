@@ -7,92 +7,53 @@ const ITEMS = [
     subtitle: "Product Intelligence",
     title: "EmpoweRx Inc.",
     desc:
-      "Turned wage intelligence data into actionable product insights for HCO/HCP decision-making.",
-    meta: "Aug 2025–Jan 2026 · Product Manager (Internship)",
+      "Led cross-functional delivery across product planning, analytics, and platform execution.",
+    meta: "Technical Product Manager · 2026",
     highlights: [
-      "Integrated BLS wage datasets for accuracy",
-      "Aligned roadmap, QA, and release readiness",
-      "Translated insights into stakeholder decisions",
+      "Integrated BLS National wage datasets into analytics platform",
+      "Aligned roadmap, QA, and release workflows",
+      "Translated workforce data into product decisions",
     ],
-    tags: ["Analytics", "Product Ops", "Stakeholders"],
-  },
-  {
-    subtitle: "Instructional Rigor",
-    title: "Northeastern University",
-    desc:
-      "Mentored AI foundations coursework with consistent grading standards and feedback depth.",
-    meta: "Jan 2026–Present · Graduate Teaching Assistant",
-    highlights: [
-      "Built rubrics for ML and reasoning topics",
-      "Reviewed assignments for conceptual accuracy",
-      "Coached students through optimization labs",
-    ],
-    tags: ["AI/ML", "Evaluation", "Mentorship"],
+    tags: ["Roadmap", "Product", "Stakeholders"],
   },
   {
     subtitle: "Performance UX",
     title: "Ekahal",
     desc:
       "Modernized React dashboards and UX flows for faster, cleaner product experiences.",
-    meta: "Jan 2023–Jun 2023 · Intern",
+    meta: "Full-Stack Developer · 2023",
     highlights: [
-      "Improved page load speed by 20%",
-      "Reduced redundant API calls across views",
-      "Lifted engagement by 10% via flow tweaks",
+      "Improved dashboard load times by 20% through API optimization",
+      "Optimized state management for smoother interactions",
+      "Increased user engagement by 10% via UX refinements",
     ],
-    tags: ["React", "Performance", "UX"],
+    tags: ["API" , "Performance", "UI/UX Workflows"],
   },
   {
     subtitle: "Conversion Systems",
-    title: "Kritexco",
+    title: "KritexCo",
     desc:
-      "Built responsive landing and portal experiences optimized for clarity and usability.",
-    meta: "Dec 2021–Feb 2022 · Intern",
+      "Developed responsive frontend systems to support conversion-focused user experiences.",
+    meta: "Web Developer · 2021",
     highlights: [
-      "Boosted session duration by 15%",
-      "Reduced bounce rates with A/B iterations",
-      "Shipped responsive UI in React + JS",
+      "Increased session duration by 15% via UI optimizations",
+      "Improved layout clarity across conversion flows",
+      "Streamlined user journeys across landing views",
     ],
-    tags: ["Frontend", "Experimentation", "Delivery"],
+    tags: ["Delivery", "Front-end", "Experimentation"],
   },
   {
     subtitle: "Experience Ops",
     title: "Travassa Holidays",
     desc:
       "Led multi-city travel operations with vendor coordination and engagement strategy.",
-    meta: "Sep 2021–Jan 2023 · Marketing Executive",
+    meta: "Marketing Executive · 2021-2023",
     highlights: [
-      "Executed trips across 10+ cities",
+      "Executed travel operations across 10+ cities",
       "Managed logistics for 500+ participants",
-      "Aligned vendors to deliver premium journeys",
+      "Oversaw end-to-end trip planning workflows",
     ],
-    tags: ["Logistics", "Partnerships", "Growth"],
-  },
-  {
-    subtitle: "Community Leadership",
-    title: "Rotaract Club of TSEC",
-    desc:
-      "Directed communications and governance for sustained community engagement.",
-    meta: "Jul 2020–Jun 2022 · Director of PR & Secretary",
-    highlights: [
-      "Led communications strategy and outreach",
-      "Organized initiatives with structured cadence",
-      "Strengthened brand presence across events",
-    ],
-    tags: ["Leadership", "Comms", "Execution"],
-  },
-  {
-    subtitle: "Editorial Strategy",
-    title: "TSEC Codestorm",
-    desc:
-      "Shaped editorial voice and public relations for a campus tech community.",
-    meta: "May 2021–Jun 2022 · PR Officer & Editorial Director",
-    highlights: [
-      "Defined editorial tone for announcements",
-      "Coordinated PR across flagship events",
-      "Built consistent storytelling guidelines",
-    ],
-    tags: ["Editorial", "Brand", "Community"],
+    tags: ["Operations", "Logistics", "Partnerships"],
   },
 ];
 

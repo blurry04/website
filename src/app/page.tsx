@@ -19,6 +19,7 @@ import {
 import HeaderNav from "./components/HeaderNav";
 import AboutSection from "./components/AboutSection";
 import ImpactSection from "./components/ImpactSection";
+import ProjectsSection from "./components/ProjectsSection";
 import SkillsSection from "./components/SkillsSection";
 import EducationSection from "./components/EducationSection";
 import ContactSection from "./components/ContactSection";
@@ -313,7 +314,15 @@ export default function Home() {
         <div className="fluid-half fluid-mesh" ref={meshRef} />
       </div>
       <ActiveSectionProvider
-        sectionIds={["home", "about", "impact", "skills", "education", "contact"]}
+        sectionIds={[
+          "home",
+          "about",
+          "impact",
+          "projects",
+          "skills",
+          "education",
+          "contact",
+        ]}
       >
         <HeaderNav />
 
@@ -329,13 +338,13 @@ export default function Home() {
               <div className="grid gap-10 pt-0 lg:grid-cols-[1.25fr_0.75fr] lg:items-stretch">
                 <div ref={heroTextRef} className="flex flex-col gap-6">
                   <span className="font-space text-left text-[116px] font-black uppercase tracking-[-0.02em] leading-[0.88] text-white pts-shadow">
-                    <span className="block pts-line text-[#111317]" data-text="Product.">
+                    <span className="block pts-line text-[var(--ink)]" data-text="Product.">
                       Product<span className="pts-dot">.</span>
                     </span>
                     <span className="block pts-line" data-text="Systems.">
                       Systems<span className="pts-dot">.</span>
                     </span>
-                    <span className="block pts-line text-[#4B5D7A]" data-text="Scale.">
+                    <span className="block pts-line text-[var(--muted)]" data-text="Scale.">
                       Scale<span className="pts-dot">.</span>
                     </span>
                   </span>
@@ -355,7 +364,7 @@ export default function Home() {
               </div>
               <div className="-mt-[12px] flex w-full justify-center">
                 <svg
-                  className="react-icon react-spin text-[#5f6772]"
+                  className="react-icon react-spin text-[var(--muted)]"
                   viewBox="-11.5 -10.23174 23 20.46348"
                   width="20"
                   height="20"
@@ -373,12 +382,12 @@ export default function Home() {
               <div className="-mt-[12px] flex w-full justify-center">
                 <p
                   ref={heroHeadlineRef}
-                  className="hero-flow font-space text-center text-[18px] font-semibold text-[#111317] uppercase md:text-[18px] lg:text-[18px] text-shadow-sm headline-shadow"
+                  className="hero-flow font-space text-center text-[18px] font-semibold text-[var(--ink)] uppercase md:text-[18px] lg:text-[18px] text-shadow-sm headline-shadow"
                 >
                   Building software where{" "}
-                  <span className="gradient-wave">strategy</span>{" "}
+                  <span className="text-[var(--accent)]">strategy</span>{" "}
                   <span className="headline-and">and</span>{" "}
-                  <span className="gradient-wave">engineering</span> move in sync.
+                  <span className="text-[var(--accent)]">engineering</span> move in sync.
                 </p>
               </div>
               <div className="flex w-full justify-center">
@@ -413,6 +422,9 @@ export default function Home() {
           </SectionFocus>
           <SectionFocus id="impact" className="w-full">
             <ImpactSection />
+          </SectionFocus>
+          <SectionFocus id="projects" className="-mt-10">
+            <ProjectsSection />
           </SectionFocus>
           <SectionFocus id="skills">
             <SkillsSection />

@@ -138,7 +138,7 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
           <div className="px-6 pt-4">
             <div className="mx-auto w-full max-w-7xl">
               <p className="section-eyebrow">Impact</p>
-              <h2 className="heading-2 mt-2">The Story So Far</h2>
+              <h2 className="heading-2 mt-2">Performance Overview</h2>
             </div>
           </div>
           <div className="overflow-hidden pt-10">
@@ -163,9 +163,9 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
                     {/* Background anchor for cinematic depth */}
                     <div className="pointer-events-none absolute -left-10 top-[-30%] h-[320px] w-[320px] rounded-full bg-[radial-gradient(circle,rgba(47,126,104,0.18)_0%,rgba(47,126,104,0.03)_55%,rgba(47,126,104,0)_70%)]" />
 
-                    <div className="relative grid h-full grid-cols-[1.4fr_0.6fr] gap-12">
+                    <div className="relative grid h-full min-h-0 grid-cols-[1.4fr_0.6fr] gap-12">
                       {/* Left column */}
-                      <div className="min-w-0 grid h-full grid-rows-[200px_92px_84px_1fr]">
+                      <div className="min-w-0 grid h-full min-h-0 grid-rows-[190px_92px_84px_1fr]">
                         {/* Row 1: Identity (fixed slot) */}
                         <div>
                           {item.subtitle && (
@@ -217,27 +217,42 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
                       </div>
 
                       {/* Right column */}
-                      <div className="min-w-0 flex h-full flex-col">
+                      <div className="min-w-0 min-h-0 flex h-full flex-col">
                         <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--ink)]/55">
-                          Key Highlights
+                          Core Contributions
                         </p>
 
                         {/* Highlights fill available space; consistent rhythm */}
-                        <ul className="mt-4 flex-1 space-y-4 overflow-hidden text-[14px] text-[var(--ink)]/75">
+                        <ul className="mt-4 flex-1 min-h-0 space-y-4 overflow-hidden text-[12px] text-[var(--ink)]/75">
                           {highlights.map((highlight) => (
                             <li key={highlight} className="flex min-w-0 gap-3">
-                              <span className="mt-[9px] h-1 w-5 shrink-0 rounded-full bg-[var(--accent)]/90" />
-                              <span className="min-w-0 truncate">{highlight}</span>
+                              <span className="mt-[1px] text-[18px] leading-none text-[var(--accent)]">
+                                •
+                              </span>
+                              <span className="min-w-0 overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+                                {highlight}
+                              </span>
                             </li>
                           ))}
                         </ul>
 
                         {/* Technologies pinned to bottom; prevent wrap-induced wobble */}
-                        <div className="mt-6">
+                        <div className="mt-auto pt-6 min-h-0">
                           <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--ink)]/55">
-                            Technologies
+                            Impact Areas
                           </p>
-                          <div className="mt-3 flex flex-nowrap gap-2 overflow-hidden">
+                          <div className="mt-3 flex flex-col gap-2">
+                            {tags.map((tag) => (
+                              <span
+                                key={tag}
+                                title={tag}
+                                className="inline-block w-fit rounded-full bg-[rgba(47,126,104,0.08)] px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[var(--ink)]/70"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                          {/* <div className="mt-3 flex flex-nowrap gap-2 overflow-hidden">
                             {tags.map((tag) => (
                               <span
                                 key={tag}
@@ -247,7 +262,7 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
                                 {tag}
                               </span>
                             ))}
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>

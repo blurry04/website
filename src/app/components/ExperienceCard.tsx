@@ -34,7 +34,7 @@ export default function ExperienceCard({
   const roleLines = splitRole(role);
 
   return (
-    <article className="relative overflow-hidden rounded-2xl border border-[rgba(32,36,43,0.12)] bg-gradient-to-br from-white/90 via-[#f6f7f9]/85 to-[#eef1f6]/90 p-6 text-[var(--ink)] shadow-[0_10px_30px_rgba(32,36,43,0.08)] backdrop-blur-sm sm:p-7">
+    <article className="relative overflow-hidden rounded-2xl border border-[rgba(32,36,43,0.12)] bg-gradient-to-br from-white/90 via-[var(--card)]/85 to-[var(--wash)]/90 p-6 text-[var(--ink)] shadow-[0_10px_30px_rgba(32,36,43,0.08)] backdrop-blur-sm sm:p-7">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_120%_at_10%_0%,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0.1)_40%,rgba(255,255,255,0)_70%)]" />
       <div className="relative flex flex-col gap-4">
         <div className="flex flex-col gap-2">

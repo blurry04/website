@@ -6,6 +6,22 @@
   --font-mono: var(--font-mono);
 }
 
+:root {
+  --bg: #eceef1;
+  --wash: #eef1f6;
+  --card: #f6f7f9;
+  --ink: #20242b;
+  --muted: #5f6772;
+  --line: #d8dde3;
+  --accent: #2f7e68;
+  --accent-hover: #2b5f55;
+  --accent-soft: #e4f1ec;
+  --hero-blue: #0018f9;
+  --hero-peri: #6f7dff;
+  --highlight: #3aa889;
+  --footer-offset: 64px;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -27,8 +43,8 @@ body {
 
 
 body {
-  background: #eceef1;
-  color: #20242b;
+  background: var(--bg);
+  color: var(--ink);
   font-family: "Satoshi", var(--font-sans), system-ui, sans-serif;
   text-rendering: optimizeLegibility;
   min-height: 100vh;
@@ -104,7 +120,12 @@ section[id] {
 }
 
 .gradient-wave {
-  background: linear-gradient(110deg, #0018f9, #6f7dff, #0018f9);
+  background: linear-gradient(
+    110deg,
+    var(--hero-blue),
+    var(--hero-peri),
+    var(--hero-blue)
+  );
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -116,7 +137,7 @@ section[id] {
 }
 
 .gradient-wave--ink {
-  background: linear-gradient(110deg, #111317, #f6f7f9, #111317);
+  background: linear-gradient(110deg, var(--ink), var(--card), var(--ink));
   background-size: 200% 100%;
 }
 
@@ -347,7 +368,7 @@ section[id] {
 
 
 .headline-and {
-  color: #4b5d7a;
+  color: var(--muted);
 }
 
 .headline-shadow {
@@ -451,7 +472,7 @@ section[id] {
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: #2f7e68;
+  background: var(--accent);
   animation: statusPulse 6s ease-in-out infinite;
 }
 
@@ -471,30 +492,20 @@ section[id] {
 @keyframes statusPulse {
   0% {
     filter: brightness(1);
-    background: #2f7e68;
+    background: var(--accent);
   }
   33% {
     filter: brightness(1.15);
-    background: #3aa889;
+    background: var(--highlight);
   }
   66% {
     filter: brightness(1.15);
-    background: #3aa889;
+    background: var(--highlight);
   }
   100% {
     filter: brightness(1);
-    background: #2f7e68;
+    background: var(--accent);
   }
-}
-
-:root {
-  --accent: #2f7e68;
-  --accent-soft: #e4f1ec;
-  --ink: #20242b;
-  --muted: #5f6772;
-  --line: #d8dde3;
-  --card: #f6f7f9;
-  --footer-offset: 64px;
 }
 
 ::selection {
@@ -503,11 +514,11 @@ section[id] {
 
 .page-bg {
   --header-offset: 96px;
-  background: #eceef1;
+  background: var(--bg);
 }
 
 .site-header {
-  background: #eceef1;
+  background: var(--bg);
   box-shadow: 0 8px 18px rgba(32, 36, 43, 0.08);
 }
 
@@ -601,7 +612,7 @@ section[id] {
     radial-gradient(820px 620px at calc(var(--mx) + 8%) calc(var(--my) - 6%), rgba(75, 93, 122, 0.24), transparent 66%),
     radial-gradient(760px 540px at calc(var(--mx) - 12%) calc(var(--my) + 10%), rgba(110, 139, 180, 0.26), transparent 68%),
     radial-gradient(900px 720px at 70% 30%, rgba(183, 169, 154, 0.18), transparent 72%),
-    linear-gradient(120deg, #eceef1 0%, #e6e9ee 55%, #e8edf2 100%);
+    linear-gradient(120deg, var(--bg) 0%, var(--wash) 55%, var(--card) 100%);
   filter: saturate(1.04);
 }
 
@@ -678,19 +689,19 @@ section[id] {
 }
 
 .pts-color-1 {
-  color: #2f7e68;
+  color: var(--accent);
 }
 
 .pts-color-2 {
-  color: #5b6772;
+  color: var(--muted);
 }
 
 .pts-color-3 {
-  color: #2b3a4a;
+  color: var(--ink);
 }
 
 .pts-color-4 {
-  color: #3d3a35;
+  color: var(--ink);
 }
 
 .pts-animated {
@@ -851,7 +862,7 @@ section[id] {
   object-fit: cover;
   object-position: center 0%;
   margin-bottom: 2px;
-  background: #eceef1;
+  background: var(--bg);
   transition: transform 220ms ease, filter 220ms ease;
 }
 
@@ -1156,7 +1167,7 @@ section[id] {
   font-size: 0.8rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #3a4250;
+  color: var(--muted);
 }
 
 .skills-track {
@@ -1168,7 +1179,7 @@ section[id] {
 
 .skills-item {
   display: inline-block;
-  color: #8a919c;
+  color: var(--muted);
   opacity: 0.7;
   transform: scale(0.94);
   transition: opacity 200ms ease, transform 200ms ease, color 200ms ease;
@@ -1176,14 +1187,14 @@ section[id] {
 }
 
 .skills-item.is-highlight {
-  color: #2b5f55;
+  color: var(--accent-hover);
   opacity: 1;
   transform: scale(1.06);
   text-shadow: 0 0 14px rgba(43, 95, 85, 0.25);
 }
 
 .skills-sep {
-  color: #9aa1ab;
+  color: var(--muted);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1201,10 +1212,10 @@ section[id] {
   transform: translateX(-50%);
   background: linear-gradient(
     to right,
-    #eceef1 0%,
+    var(--bg) 0%,
     rgba(236, 238, 241, 0) 15%,
     rgba(236, 238, 241, 0) 85%,
-    #eceef1 100%
+    var(--bg) 100%
   );
 }
 
