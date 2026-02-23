@@ -8,6 +8,7 @@ export default function HeaderNav() {
     () => [
       { label: "About", href: "#about" },
       { label: "Impact", href: "#impact" },
+      { label: "Projects", href: "#projects" },
       { label: "Skills", href: "#skills" },
       { label: "Education", href: "#education" },
       { label: "Contact", href: "#contact" },

@@ -7,16 +7,16 @@ export default function AboutSection() {
     <div className="grid gap-6">
       <div className="grid gap-10 lg:grid-cols-[30%_70%] lg:items-stretch">
         <div>
-          <p className="text-[16px] font-semibold uppercase tracking-[0.4em] text-[#5f6772] drop-shadow-[0_4px_12px_rgba(32,36,43,0.18)]">
+          <p className="text-[16px] font-semibold uppercase tracking-[0.4em] text-[var(--muted)] drop-shadow-[0_4px_12px_rgba(32,36,43,0.18)]">
             BUILT WITH INTENT
           </p>
-          <p className="mt-5 text-[15px] leading-relaxed text-[#5f6772]">
+          <p className="mt-5 text-[15px] leading-relaxed text-[var(--muted)]">
             I work at the intersection of product clarity and technical execution, translating ambiguity into structured direction and scalable systems.
           </p>
-          <p className="mt-4 text-[15px] leading-relaxed text-[#5f6772]">
+          <p className="mt-4 text-[15px] leading-relaxed text-[var(--muted)]">
             From roadmap planning to full-stack implementation, I focus on aligning teams around what matters and executing with precision.
           </p>
-          <p className="mt-4 text-[15px] leading-relaxed text-[#5f6772]">
+          <p className="mt-4 text-[15px] leading-relaxed text-[var(--muted)]">
             The edge isn’t motion for the sake of progress; it’s clarity in decision-making and discipline in delivery.
           </p>
         </div>

@@ -512,7 +512,7 @@ const AboutCarousel3D = () => {
         <div className="absolute inset-0">
           <div
             ref={leftRef}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[#d8dde3] bg-[#f6f7f9] p-6 text-[#20242b] shadow-sm"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)] shadow-sm"
             style={{ width: cardDims.width, height: cardDims.height }}
             tabIndex={0}
             role="group"
@@ -520,20 +520,20 @@ const AboutCarousel3D = () => {
           >
             <div className="about-card-inner flex h-full flex-col">
               <div className="about-card-text flex-[0_0_25%]">
-                <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[#5f6772]">
+                <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
                   {leftCard.title}
                 </p>
-                <span className="mt-2 block h-px w-10 bg-[#d8dde3]" />
+                <span className="mt-2 block h-px w-10 bg-[var(--line)]" />
               </div>
               <div className="about-card-text flex-[0_0_35%] flex items-center">
-                <p className="text-[12px] text-[#5f6772]">{leftCard.description}</p>
+                <p className="text-[12px] text-[var(--muted)]">{leftCard.description}</p>
               </div>
               <div className="flex-[0_0_40%] flex items-end">
                 <div className="flex flex-wrap gap-2">
                   {leftCard.chips.map((chip) => (
                     <span
                       key={chip}
-                      className="rounded-full border border-[#b9c8c2] bg-[#e4f1ec] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[#5f6772]"
+                      className="rounded-full border border-[var(--line)] bg-[var(--accent-soft)] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]"
                     >
                       {chip}
                     </span>
@@ -545,7 +545,7 @@ const AboutCarousel3D = () => {
 
           <div
             ref={centerRef}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[#d8dde3] bg-[#f6f7f9] p-6 text-[#20242b]"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)]"
             style={{ width: cardDims.width, height: cardDims.height }}
             tabIndex={0}
             role="group"
@@ -553,20 +553,20 @@ const AboutCarousel3D = () => {
           >
             <div className="about-card-inner flex h-full flex-col">
               <div className="about-card-text flex-[0_0_25%]">
-                <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[#5f6772]">
+                <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
                   {centerCard.title}
                 </p>
-                <span className="mt-2 block h-px w-10 bg-[#d8dde3]" />
+                <span className="mt-2 block h-px w-10 bg-[var(--line)]" />
               </div>
               <div className="about-card-text flex-[0_0_35%] flex items-center">
-                <p className="text-[12px] text-[#5f6772]">{centerCard.description}</p>
+                <p className="text-[12px] text-[var(--muted)]">{centerCard.description}</p>
               </div>
               <div className="flex-[0_0_40%] flex items-end">
                 <div className="flex flex-wrap gap-2">
                   {centerCard.chips.map((chip) => (
                     <span
                       key={chip}
-                      className="rounded-full border border-[#b9c8c2] bg-[#e4f1ec] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[#5f6772]"
+                      className="rounded-full border border-[var(--line)] bg-[var(--accent-soft)] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]"
                     >
                       {chip}
                     </span>
@@ -578,7 +578,7 @@ const AboutCarousel3D = () => {
 
           <div
             ref={rightRef}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[#d8dde3] bg-[#f6f7f9] p-6 text-[#20242b] shadow-sm"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)] shadow-sm"
             style={{ width: cardDims.width, height: cardDims.height }}
             tabIndex={0}
             role="group"
@@ -586,20 +586,20 @@ const AboutCarousel3D = () => {
           >
             <div className="about-card-inner flex h-full flex-col">
               <div className="about-card-text flex-[0_0_25%]">
-                <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[#5f6772]">
+                <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
                   {rightCard.title}
                 </p>
-                <span className="mt-2 block h-px w-10 bg-[#d8dde3]" />
+                <span className="mt-2 block h-px w-10 bg-[var(--line)]" />
               </div>
               <div className="about-card-text flex-[0_0_35%] flex items-center">
-                <p className="text-[12px] text-[#5f6772]">{rightCard.description}</p>
+                <p className="text-[12px] text-[var(--muted)]">{rightCard.description}</p>
               </div>
               <div className="flex-[0_0_40%] flex items-end">
                 <div className="flex flex-wrap gap-2">
                   {rightCard.chips.map((chip) => (
                     <span
                       key={chip}
-                      className="rounded-full border border-[#b9c8c2] bg-[#e4f1ec] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[#5f6772]"
+                      className="rounded-full border border-[var(--line)] bg-[var(--accent-soft)] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]"
                     >
                       {chip}
                     </span>
