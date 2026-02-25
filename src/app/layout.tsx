@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   description:
     "Welcome to the Matrix.",
   icons: {
-    icon: "/bg_logo.jpeg",
+    icon: "/bg_logo1.jpeg",
   },
 };
 
