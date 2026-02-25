@@ -7,10 +7,9 @@ export default function SkillsSection() {
     <div className="grid gap-6">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p className="section-eyebrow">Skills</p>
-          <h2 className="heading-2 mt-2">
-            Product strategy meets hands-on delivery.
-          </h2>
+          <p className="text-[16px] font-semibold uppercase tracking-[0.4em] text-[var(--muted)] drop-shadow-[0_4px_12px_rgba(32,36,43,0.18)]">
+            Core Capabilities
+          </p>
         </div>
       </div>
       <SkillsTicker />

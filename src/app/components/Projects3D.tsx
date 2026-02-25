@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ExternalLink, Github } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 
@@ -19,14 +19,24 @@ type Projects3DProps = {
 export default function Projects3D({ items }: Projects3DProps) {
   const prefersReducedMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const baseTilt = -45;
-  const baseX = prefersReducedMotion ? 0 : 2;
-  const activeZ = prefersReducedMotion ? 40 : 120;
-  const activeY = prefersReducedMotion ? -2 : -8;
-  const activeScale = prefersReducedMotion ? 1.005 : 1.02;
-  const dimZ = prefersReducedMotion ? 0 : -50;
-  const dimBlur = prefersReducedMotion ? "blur(0px)" : "blur(1px)";
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  const isCompact = prefersReducedMotion || isMobile;
+  const baseTilt = isCompact ? -10 : -45;
+  const baseX = isCompact ? 0 : 2;
+  const activeZ = isCompact ? 40 : 120;
+  const activeY = isCompact ? -2 : -8;
+  const activeScale = isCompact ? 1.01 : 1.02;
+  const dimZ = isCompact ? 0 : -50;
+  const dimBlur = isCompact ? "blur(0px)" : "blur(1px)";
 
   const getState = (index: number) => {
     if (activeIndex === null) return "idle";
@@ -51,13 +61,20 @@ export default function Projects3D({ items }: Projects3DProps) {
     >
       <div
         // Allow translateZ to render without clipping.
-        className="grid gap-6 overflow-visible sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
+        className="grid gap-4 overflow-visible sm:grid-cols-1 sm:gap-6 md:grid-cols-2 xl:grid-cols-3"
         style={{ transformStyle: "preserve-3d" }}
       >
         {items.map((project, index) => {
           const state = getState(index);
           const isActive = state === "active";
           const primaryUrl = project.liveUrl ?? project.githubUrl;
+          const firstRowOffset = index < 3 ? "xl:mt-[30px]" : "";
+          const secondRowCenter =
+            index === 3
+              ? "xl:col-start-1 xl:translate-x-[calc(50%+12px)]"
+              : index === 4
+                ? "xl:col-start-2 xl:translate-x-[calc(50%+12px)]"
+                : "";
 
           return (
             <motion.article
@@ -100,7 +117,7 @@ export default function Projects3D({ items }: Projects3DProps) {
                       }
               }
               transition={spring}
-              className="relative h-[320px] rounded-[18px] border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)] shadow-[0_20px_40px_rgba(32,36,43,0.08)] transition-shadow focus-within:ring-2 focus-within:ring-[var(--accent)]/50"
+              className={`relative h-[280px] rounded-[18px] border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)] shadow-[0_20px_40px_rgba(32,36,43,0.08)] transition-shadow focus-within:ring-2 focus-within:ring-[var(--accent)]/50 ${firstRowOffset} ${secondRowCenter}`}
               style={{
                 transformStyle: "preserve-3d",
                 willChange: "transform, filter, opacity",
@@ -109,6 +126,7 @@ export default function Projects3D({ items }: Projects3DProps) {
                   : "0 20px 40px rgba(32,36,43,0.08)",
               }}
             >
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_8%,rgba(47,126,104,0.18)_0%,rgba(47,126,104,0.06)_38%,rgba(47,126,104,0)_70%)]" />
               <a
                 href={primaryUrl}
                 target="_blank"
@@ -130,10 +148,10 @@ export default function Projects3D({ items }: Projects3DProps) {
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`Open ${project.title} live`}
-                      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--line)] text-[var(--ink)] transition hover:-translate-y-0.5 hover:text-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--line)] text-[var(--ink)] leading-none transition hover:-translate-y-0.5 hover:text-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
                       onPointerDown={(event) => event.stopPropagation()}
                     >
-                      <ExternalLink className="h-4 w-4" />
+                      <ExternalLink className="h-4 w-4 shrink-0" />
                     </a>
                   )}
                   <a
@@ -141,10 +159,10 @@ export default function Projects3D({ items }: Projects3DProps) {
                     target="_blank"
                     rel="noreferrer"
                     aria-label={`Open ${project.title} GitHub`}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--line)] text-[var(--ink)] transition hover:-translate-y-0.5 hover:text-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--line)] text-[var(--ink)] leading-none transition hover:-translate-y-0.5 hover:text-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
                     onPointerDown={(event) => event.stopPropagation()}
                   >
-                    <Github className="h-4 w-4" />
+                    <Github className="h-4 w-4 shrink-0" />
                   </a>
                 </div>
               </div>

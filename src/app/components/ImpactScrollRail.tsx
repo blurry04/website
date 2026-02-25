@@ -23,6 +23,7 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
   const [maxTranslate, setMaxTranslate] = useState(0);
   const [sectionHeight, setSectionHeight] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const deriveMetrics = (item: RailItem) => {
     const meta = item.meta ?? "";
@@ -46,9 +47,18 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
   }, []);
 
   useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
     containerRef.current = document.body;
   }, []);
   useLayoutEffect(() => {
+    if (isMobile) return;
     const rail = railRef.current;
     if (!rail) return;
 
@@ -80,7 +90,7 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
       window.removeEventListener("resize", updateMeasures);
       ro.disconnect();
     };
-  }, [items.length]);
+  }, [items.length, isMobile]);
   // useLayoutEffect(() => {
   //   const updateMeasures = () => {
   //     const rail = railRef.current;
@@ -106,13 +116,18 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
 
   const x = useTransform(scrollYProgress, [0, 1], [0, -maxTranslate]);
 
-  if (reducedMotion) {
+  if (reducedMotion || isMobile) {
     return (
-      <div className="grid gap-4">
+      <div className="grid gap-4 sm:gap-6">
+        <div className="px-1">
+          <p className="text-[14px] font-semibold uppercase tracking-[0.36em] text-[var(--muted)] drop-shadow-[0_4px_12px_rgba(32,36,43,0.18)] sm:text-[16px]">
+            PERFORMANCE OVERVIEW
+          </p>
+        </div>
         {items.map((item) => (
           <article
             key={item.title}
-            className="rounded-2xl border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)] shadow-[0_14px_32px_rgba(32,36,43,0.08)] focus-within:opacity-100 focus-within:blur-0 focus-within:scale-100"
+            className="rounded-2xl border border-[var(--line)] bg-[var(--card)] p-5 text-[var(--ink)] shadow-[0_14px_32px_rgba(32,36,43,0.08)] focus-within:opacity-100 focus-within:blur-0 focus-within:scale-100 sm:p-6"
           >
             <h3 className="text-xl font-semibold">{item.title}</h3>
             <p className="mt-2 text-sm text-[var(--ink)]/75">{item.desc}</p>
@@ -135,18 +150,19 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
     >
       <div className="sticky top-[96px] h-[calc(100vh-96px)] w-full overflow-hidden">
         <div className="grid h-full grid-rows-[auto_1fr]">
-          <div className="px-6 pt-4">
+          <div className="px-4 pt-2 sm:px-6 sm:pt-4">
             <div className="mx-auto w-full max-w-7xl">
-              <p className="section-eyebrow">Impact</p>
-              <h2 className="heading-2 mt-2">Performance Overview</h2>
+              <p className="text-[16px] font-semibold uppercase tracking-[0.4em] text-[var(--muted)] drop-shadow-[0_4px_12px_rgba(32,36,43,0.18)]">
+            PERFORMANCE OVERVIEW
+          </p>
             </div>
           </div>
-          <div className="overflow-hidden pt-10">
+          <div className="overflow-hidden pt-6 sm:pt-10">
             <motion.div
               ref={railRef}
               style={{ x }}
               data-impact-rail
-              className="flex h-full w-max items-start gap-6 px-6 will-change-transform"
+              className="flex h-full w-max items-start gap-6 px-4 will-change-transform sm:px-6"
             >
               {items.map((item) => {
                 const metrics = deriveMetrics(item);
