@@ -5,36 +5,51 @@ import Projects3D from "./Projects3D";
 const PROJECTS = [
   {
     title: "Quill & Pigeon",
-    subtitle: "Artist Analytics Dashboard",
+    subtitle: "XN Project",
     points: [
       "Responsive analytics dashboard for engagement and sales insights.",
+      "Inventory and revenue tracking workflows",
       "Modular UI system with Next.js + Tailwind.",
       "Supabase Auth + real-time data sync.",
+      "Supports operational insights for creators.",
     ],
-    githubUrl: "https://github.com/gauravadvani/quill-and-pigeon",
+    githubUrl: "https://github.com/blurry04/webdevproj",
     liveUrl: "https://quill-and-pigeon.vercel.app",
   },
   {
-    title: "Travelpedia",
-    subtitle: "Android Travel Planner App",
+    title: "The Activity Hub",
+    subtitle: "Recreational Engagement",
     points: [
-      "Itinerary planning, expense tracking, and smart packing.",
-      "Java UI flows with conditional forms and date pickers.",
-      "Firebase Firestore real-time sync and editing.",
+      "Location-based event discovery system",
+      "Local sports meetup coordination platform.",
+      "Group scheduling and participation tracking",
+      "Designed for community engagement",
     ],
-    githubUrl: "https://github.com/gauravadvani/travelpedia",
+    githubUrl: "https://github.com/blurry04/activityhub",
   },
   {
     title: "Market Analysis Tool",
     subtitle: "Product Data Platform",
     points: [
-      "County-level wage insights with public data sources.",
+      "County-level wage insights by integrating national workforce datasets",
       "Research-backed product strategy and delivery.",
-      "Automated reporting and export workflows.",
+      "Supports staffing and pay decisions",
+      "Data pipelines for workforce insights",
     ],
-    githubUrl: "https://github.com/gauravadvani/market-analysis-tool",
-    liveUrl: "https://market-analysis-tool.vercel.app",
+    githubUrl: "https://github.com/blurry04/",
+    liveUrl: "https://empowerxinc.com/",
   },
+  {
+      title: "Travelpedia",
+      subtitle: "Android Travel Planner App",
+      points: [
+        "Itinerary planning, expense tracking, and smart packing.",
+        "Java UI flows with conditional forms and date pickers.",
+        "Firebase Firestore real-time sync and editing.",
+        "Supports end-to-end travel planning",
+      ],
+      githubUrl: "https://github.com/NEU-Roux/final-project-blurry04",
+    },
   {
     title: "Signal Console",
     subtitle: "Product Ops Workspace",
@@ -43,59 +58,7 @@ const PROJECTS = [
       "Role-based views for stakeholders and operators.",
       "Automated summaries for weekly decision review.",
     ],
-    githubUrl: "https://github.com/gauravadvani/signal-console",
-  },
-  {
-    title: "Growth Lab",
-    subtitle: "Experimentation Dashboard",
-    points: [
-      "A/B experiment tracking with lift snapshots.",
-      "Cohort views for retention and activation.",
-      "Executive summaries for product leadership.",
-    ],
-    githubUrl: "https://github.com/gauravadvani/growth-lab",
-    liveUrl: "https://growth-lab.vercel.app",
-  },
-  {
-    title: "Portfolio OS",
-    subtitle: "Personal Brand System",
-    points: [
-      "Modular section system with reusable layouts.",
-      "Theme tokens for consistent UI polish.",
-      "Smooth motion and scroll-driven highlights.",
-    ],
-    githubUrl: "https://github.com/gauravadvani/portfolio-os",
-  },
-  {
-    title: "Insight Vault",
-    subtitle: "Research Repository",
-    points: [
-      "Structured research briefs and decision logs.",
-      "Tag-driven retrieval for fast synthesis.",
-      "Export-ready summaries for stakeholders.",
-    ],
-    githubUrl: "https://github.com/gauravadvani/insight-vault",
-  },
-  {
-    title: "Ops Pulse",
-    subtitle: "Service Health Monitor",
-    points: [
-      "Incident timelines with recovery checkpoints.",
-      "Service-level insights and status history.",
-      "Owner notes for post-incident learnings.",
-    ],
-    githubUrl: "https://github.com/gauravadvani/ops-pulse",
-    liveUrl: "https://ops-pulse.vercel.app",
-  },
-  {
-    title: "Flow Canvas",
-    subtitle: "Journey Mapping Tool",
-    points: [
-      "Customer journey mapping with touchpoints.",
-      "Exportable flow visuals for workshops.",
-      "Shared boards for cross-team alignment.",
-    ],
-    githubUrl: "https://github.com/gauravadvani/flow-canvas",
+    githubUrl: "https://github.com/blurry04/mockup",
   },
 ];
 
@@ -104,8 +67,9 @@ export default function ProjectsSection() {
     <div className="grid gap-6">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p className="section-eyebrow">Projects</p>
-          <h2 className="heading-2 mt-2">Selected builds with measured outcomes.</h2>
+          <p className="text-[16px] font-semibold uppercase tracking-[0.4em] text-[var(--muted)] drop-shadow-[0_4px_12px_rgba(32,36,43,0.18)]">
+            Shipped Systems
+          </p>
         </div>
       </div>
 

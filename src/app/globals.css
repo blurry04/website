@@ -59,6 +59,29 @@ section[id] {
   :root {
     --footer-offset: 88px;
   }
+
+  .icon-row {
+    --icon-gap: 22px;
+    max-width: 100%;
+  }
+
+  .skills-ticker {
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+
+  .skills-track {
+    gap: 10px;
+  }
+
+  .skills-item.is-highlight {
+    padding-inline: 18px;
+    margin-inline: -18px;
+  }
+
+  .skills-sep {
+    margin: 0 8px;
+  }
 }
 
 .terminal-section {
@@ -1187,10 +1210,14 @@ section[id] {
 }
 
 .skills-item.is-highlight {
-  color: var(--accent-hover);
+  color: var(--muted);
   opacity: 1;
   transform: scale(1.06);
-  text-shadow: 0 0 14px rgba(43, 95, 85, 0.25);
+  font-weight: 600;
+  font-size: calc(0.8rem + 1px);
+  padding-inline: 28px;
+  margin-inline: -28px;
+  text-shadow: none;
 }
 
 .skills-sep {
@@ -1217,6 +1244,43 @@ section[id] {
     rgba(236, 238, 241, 0) 85%,
     var(--bg) 100%
   );
+}
+
+.footer-ticker {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--muted);
+}
+
+.footer-track {
+  display: inline-flex;
+  gap: 32px;
+  width: max-content;
+  transform: translate3d(0, 0, 0);
+  animation: footerTicker 32s linear infinite;
+  will-change: transform;
+}
+
+.footer-row {
+  display: inline-flex;
+  gap: 12px;
+}
+
+.footer-item {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+@keyframes footerTicker {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 @keyframes subtleBounce {

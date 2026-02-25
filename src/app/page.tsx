@@ -326,18 +326,18 @@ export default function Home() {
       >
         <HeaderNav />
 
-        <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-2 pt-[20px]">
+        <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-10 px-4 pb-2 pt-[20px] sm:px-6 md:gap-16">
           <SectionFocus id="home" disableFocus>
-            <div className="min-h-[80vh] flex flex-col justify-between">
+            <div className="min-h-[70vh] flex flex-col justify-between md:min-h-[80vh]">
               <div className="flex w-full justify-center">
                 <span className="status-pill status-pill--header">
                   <span className="status-dot" aria-hidden="true" />
                   OPEN TO PRODUCT AND TECH
                 </span>
               </div>
-              <div className="grid gap-10 pt-0 lg:grid-cols-[1.25fr_0.75fr] lg:items-stretch">
+              <div className="grid gap-8 pt-0 lg:grid-cols-[1.25fr_0.75fr] lg:items-stretch md:gap-10">
                 <div ref={heroTextRef} className="flex flex-col gap-6">
-                  <span className="font-space text-left text-[116px] font-black uppercase tracking-[-0.02em] leading-[0.88] text-white pts-shadow">
+                  <span className="font-space text-left text-[52px] font-black uppercase tracking-[-0.02em] leading-[0.88] text-white pts-shadow sm:text-[76px] lg:text-[116px]">
                     <span className="block pts-line text-[var(--ink)]" data-text="Product.">
                       Product<span className="pts-dot">.</span>
                     </span>
@@ -423,7 +423,7 @@ export default function Home() {
           <SectionFocus id="impact" className="w-full">
             <ImpactSection />
           </SectionFocus>
-          <SectionFocus id="projects" className="-mt-10">
+          <SectionFocus id="projects" className="md:-mt-20">
             <ProjectsSection />
           </SectionFocus>
           <SectionFocus id="skills">

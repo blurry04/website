@@ -69,23 +69,27 @@ export default function HeaderNav() {
   return (
     <header className="site-header sticky top-0 z-20">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-6 px-6 pb-4 pt-6">
-        <div className="flex flex-none items-center justify-start gap-3">
+        <a
+          href="#home"
+          className="flex flex-none items-center justify-start gap-3"
+          aria-label="Go to top"
+        >
           <img
             className="header-avatar"
-            src="/Confident%20style%20and%20charm.png"
+            src="/bg_logo.png"
             alt="Gaurav portrait"
           />
           <div className="leading-none name-block">
-            <p className="name-text font-name whitespace-nowrap text-base font-semibold tracking-[0.06em] text-[var(--ink)]">
+            <p className="name-text font-name whitespace-nowrap text-sm font-semibold tracking-[0.06em] text-[var(--ink)] sm:text-base">
               GAURAV ADVANI
             </p>
-            <div className="title-marquee">
+            <div className="title-marquee hidden sm:block">
               <span className="title-marquee__track">
                 AI/ML · Full Stack · Product · Strategy · UI/UX
               </span>
             </div>
           </div>
-        </div>
+        </a>
         <div
           ref={navRef}
           className="nav-links flex min-w-0 flex-1 items-center justify-end gap-6 text-xs uppercase font-medium tracking-[0.26em]"

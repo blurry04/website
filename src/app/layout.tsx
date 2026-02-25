@@ -51,6 +51,9 @@ export const metadata: Metadata = {
   title: "Gaurav Advani",
   description:
     "Welcome to the Matrix.",
+  icons: {
+    icon: "/bg_logo.jpeg",
+  },
 };
 
 export default function RootLayout({

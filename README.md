@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gaurav Advani — Portfolio
 
-## Getting Started
+Clean, premium portfolio built with Next.js (App Router). Includes focused-section scrolling, horizontal impact rail, 3D project cards, and a minimal design system.
 
-First, run the development server:
+## Highlights
+- Section focus system (active section sharp, others softened)
+- Impact rail with scroll-driven horizontal motion
+- 3D Projects grid with hover/focus depth
+- Calmer Education and Contact sections with subtle motion
+- Consistent tokenized theme and typography
 
+## Tech Stack
+- Next.js (App Router)
+- React + TypeScript
+- Tailwind CSS
+- Framer Motion
+- GSAP
+- Lucide React
+
+## Local Setup
+Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run the dev server:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open:
+```txt
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
+```txt
+src/app/
+  components/
+    AboutSection.tsx
+    ImpactScrollRail.tsx
+    Projects3D.tsx
+    EducationSection.tsx
+    ContactSection.tsx
+    SiteFooter.tsx
+  page.tsx
+  layout.tsx
+  globals.css
+```
 
-## Learn More
+## Scripts
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Notes
+- Design tokens live in `src/app/globals.css`.
+- Visual polish leans on subtle motion, depth, and typographic hierarchy.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
