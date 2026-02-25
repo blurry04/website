@@ -52,7 +52,7 @@ export default function ContactSection() {
       y: 0,
       transition: prefersReducedMotion
         ? { duration: 0 }
-        : { duration: 0.45, ease: "easeOut", staggerChildren: 0.05 },
+        : { duration: 0.45, ease: [0.16, 1, 0.3, 1], staggerChildren: 0.05 },
     },
   };
 
@@ -63,7 +63,7 @@ export default function ContactSection() {
       y: 0,
       transition: prefersReducedMotion
         ? { duration: 0 }
-        : { duration: 0.3, ease: "easeOut" },
+        : { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
     },
   };
 
