@@ -52,7 +52,11 @@ export default function ContactSection() {
       y: 0,
       transition: prefersReducedMotion
         ? { duration: 0 }
-        : { duration: 0.45, ease: [0.16, 1, 0.3, 1] as const, staggerChildren: 0.05 },
+        : {
+            duration: 0.45,
+            ease: [0.16, 1, 0.3, 1] as const,
+            staggerChildren: 0.05,
+          },
     },
   };
 
@@ -81,10 +85,13 @@ export default function ContactSection() {
             Next Chapter
           </p>
           <p className="mt-4 text-[14px] text-[var(--muted)] sm:mt-5 sm:text-[15px]">
-            Focused on building systems that scale with clarity, reliability, and long-term intent. Execution stays disciplined and grounded in fundamentals, not noise or shortcuts. 
+            Focused on building systems that scale with clarity, reliability,
+            and long-term intent. Execution stays disciplined and grounded in
+            fundamentals, not noise or shortcuts.
           </p>
           <p className="mt-4 text-[14px] text-[var(--muted)] sm:mt-5 sm:text-[15px]">
-          The next chapter begins where ambition meets structure and ideas become operational.
+            The next chapter begins where ambition meets structure and ideas
+            become operational.
           </p>
         </div>
 
@@ -96,7 +103,7 @@ export default function ContactSection() {
             className="contact-hang__cta inline-flex items-center rounded-2xl border border-[var(--line)] px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.22em] text-[var(--muted)] transition hover:bg-[var(--accent-soft)]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]/60"
             tabIndex={0}
           >
-            Let's talk Strategy!
+            Let&apos;s talk Strategy!
           </motion.div>
           <div className="contact-hang__icons flex flex-wrap items-center justify-start gap-3 md:justify-center">
             {CONTACTS.map((item) => {
@@ -123,3 +130,4 @@ export default function ContactSection() {
     </motion.div>
   );
 }
+```

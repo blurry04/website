@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, type Easing } from "framer-motion";
 import { useActiveSectionContext } from "./ActiveSectionContext";
 
 const EDUCATION = [
@@ -47,6 +47,7 @@ export default function EducationSection() {
   const prefersReducedMotion = useReducedMotion();
   const { activeId } = useActiveSectionContext();
   const isFocused = activeId === "education";
+  const easeStandard: Easing = [0.25, 0.1, 0.25, 1];
 
   const sectionVariants = {
     hidden: {},
@@ -62,7 +63,7 @@ export default function EducationSection() {
       y: 0,
       transition: prefersReducedMotion
         ? { duration: 0 }
-        : { duration: 0.45, ease: "easeOut" },
+        : { duration: 0.45, ease: easeStandard },
     },
   };
 
@@ -73,7 +74,7 @@ export default function EducationSection() {
       y: 0,
       transition: prefersReducedMotion
         ? { duration: 0 }
-        : { delay: 0.12, duration: 0.35, ease: "easeOut" },
+        : { delay: 0.12, duration: 0.35, ease: easeStandard },
     },
   };
 
@@ -100,7 +101,7 @@ export default function EducationSection() {
       y: 0,
       transition: prefersReducedMotion
         ? { duration: 0 }
-        : { delay: 0.25, duration: 0.35, ease: "easeOut" },
+        : { delay: 0.25, duration: 0.35, ease: easeStandard },
     },
   };
 
