@@ -8,7 +8,7 @@ const EDUCATION = [
     university: "Northeastern University",
     degree: "M.S. Computer Science · Jan 2024 – May 2026",
     taRole: "Graduate Teaching Assistant",
-    taImpact: "Built grading frameworks and coached ML foundations labs.",
+    taImpact: "Built grading frameworks and coached AI foundations labs.",
     coursework: [
       "Algorithms",
       "Human-Computer Interaction",
@@ -17,25 +17,26 @@ const EDUCATION = [
       "Natural Language Processing",
     ],
     learned: [
-      "Technical foundation across Relevant Coursework and Projects.",
-      "Applied ML and AI concepts to real-world problem solving, focusing on performance and model behavior",
-      "Strengthened product thinking through HCI principles, usability testing, and UI/UX design",
-      "Emphasis on structured problem-solving, optimization, and production-ready implementation",
+      "Built a strong technical foundation through coursework and projects, applying ML and AI to real-world problems while strengthening product thinking through HCI, usability, and structured, production-ready implementation.",
     ],
     cgpa: "CGPA: 3.95",
-    roles: ["Teaching Assistant · Khoury College", "Coursework Support · AI/ML", "President · Roux Gaming Club", " Member · Roux Coywolves Football Team"],
+    roles: ["Teaching Assistant · Khoury College", "President · Roux Gaming Club", "PineTree Hackathon Winner",],
   },
   {
     university: "Mumbai University, India",
     degree: "B.E. Computer Science · May 2023",
-    taRole: "Lab Mentor",
-    taImpact: "Guided peers through systems labs and code reviews.",
-    coursework: ["Data Structures", "Operating Systems", "Databases", "Networks"],
+    taRole: "Technical Events Lead",
+    taImpact: "Hosted Multiple Campus Events (500+ Attendees)",
+    coursework: [
+      "Data Structures",
+      "Object Oriented Programming", 
+      "Software Engineering", 
+      "Computer Networks", 
+      "Internet Programming",
+      "Operating Systems",
+    ],
     learned: [
-      "Explored Internet Programming, connecting backend logic, databases, and client-facing interfaces",
-      "Applied object-oriented design and algorithmic thinking to develop scalable, maintainable systems",
-      "Developed early exposure to Machine Learning and Artificial Intelligence concepts",
-      "Strengthened analytical reasoning and computational thinking that later translated into internship execution and production-level development",
+      "Explored Internet Programming by integrating backend logic, databases, and client-facing interfaces, applied object-oriented and algorithmic principles to build scalable systems, gained early exposure to ML and AI concepts, and strengthened analytical thinking that later translated into production-level execution.",
     ],
     cgpa: "CGPA: 3.40",
     roles: ["Cricket, Football & Basketball Teams", "Secretary · Rotaract Club of TSEC", "PR & Editorial Head · TSEC Codestorm"],              
@@ -178,7 +179,7 @@ export default function EducationSection() {
                       <motion.span
                         key={course}
                         variants={pillItem}
-                        className="rounded-full border border-[var(--line)] bg-[var(--card)] px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]"
+                        className="pill-strong rounded-full border border-[var(--line)] bg-[var(--card)] px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]"
                       >
                         {course}
                       </motion.span>

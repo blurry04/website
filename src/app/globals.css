@@ -31,6 +31,9 @@ body {
   height: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  scrollbar-width: none;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
 }
 
 body {
@@ -39,6 +42,12 @@ body {
   margin: 0;
   max-width: 100%;
   overflow-x: hidden;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 
@@ -61,8 +70,88 @@ section[id] {
   }
 
   .icon-row {
-    --icon-gap: 22px;
+    --icon-gap: 6px;
     max-width: 100%;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  .icon-chip {
+    gap: 2px;
+    font-size: 7px;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .icon-svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 1.4;
+  }
+
+  .icon-label {
+    font-size: 6px;
+    letter-spacing: 0.07em;
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    --hero-mobile-media: 136px;
+  }
+
+  .hero-title-stack {
+    font-size: clamp(28px, 8vw, 36px);
+    line-height: 0.82;
+    min-height: var(--hero-mobile-media);
+    display: block;
+  }
+
+  .hero-title-stack .pts-line {
+    line-height: 0.82;
+  }
+
+  .hero-media {
+    justify-self: end;
+    align-items: flex-end;
+  }
+
+  .hero-image-wrap {
+    transform: translateY(0);
+    height: var(--hero-mobile-media);
+  }
+
+  .hero-editorial-image {
+    width: auto;
+    max-width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .hero-react-row .react-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .hero-headline-row .hero-flow {
+    font-size: clamp(10px, 3.2vw, 12px);
+    line-height: 1.2;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+  }
+
+  .hero-headline-lines {
+    white-space: normal;
+  }
+
+  .hero-headline-line {
+    display: block;
+  }
+
+  .hero-react-row,
+  .hero-headline-row {
+    margin-top: 4px !important;
   }
 
   .skills-ticker {
@@ -81,6 +170,31 @@ section[id] {
 
   .skills-sep {
     margin: 0 8px;
+  }
+
+  .about-card--mobile {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: translate(-50%, -50%) scale(1) !important;
+    box-shadow: 0 18px 36px rgba(32, 36, 43, 0.1);
+  }
+
+  .about-card--mobile .about-card-inner {
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .icon-row {
+    --icon-gap: 6px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  .icon-chip {
+    flex: 1 1 0;
+    min-width: 0;
   }
 }
 
@@ -501,6 +615,89 @@ section[id] {
 
 .text-shadow-sm {
   text-shadow: 0 2px 8px rgba(32, 36, 43, 0.16);
+}
+
+.pill-strong {
+  background: rgba(47, 126, 104, 0.18);
+  border-color: rgba(47, 126, 104, 0.4);
+  color: rgba(32, 36, 43, 0.9);
+  font-weight: 600;
+  box-shadow: 0 8px 18px rgba(32, 36, 43, 0.08);
+}
+
+.contact-hang {
+  position: relative;
+  align-self: stretch;
+  align-items: center;
+}
+
+.contact-hang__cta {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(236, 238, 241, 0.9));
+  border-color: rgba(47, 126, 104, 0.25);
+  box-shadow:
+    0 16px 36px rgba(32, 36, 43, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  color: rgba(32, 36, 43, 0.78);
+}
+
+.contact-hang__icons {
+  position: relative;
+  padding-top: 26px;
+}
+
+.contact-hang__icons::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  width: 260px;
+  height: 22px;
+  transform: translateX(-50%);
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(47, 126, 104, 0.22) 14%, rgba(47, 126, 104, 0.22) 86%, transparent 100%);
+  opacity: 0.35;
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+.contact-hang__icons > a {
+  position: relative;
+}
+
+.contact-hang__icons > a::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -26px;
+  width: 1px;
+  height: 22px;
+  background: linear-gradient(180deg, rgba(47, 126, 104, 0.45), rgba(47, 126, 104, 0.05));
+  transform: translateX(-50%);
+  opacity: 0.6;
+}
+
+.contact-hang__icons > a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(47, 126, 104, 0.45);
+  transform: translateX(-50%);
+  opacity: 0.7;
+}
+
+@media (max-width: 640px) {
+  .contact-hang__icons::before {
+    width: 200px;
+  }
+  .contact-hang__icons > a::before {
+    height: 18px;
+    top: -22px;
+  }
 }
 
 .status-pill--header {

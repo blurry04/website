@@ -9,23 +9,20 @@ const PROJECTS = [
     points: [
       "Responsive analytics dashboard for engagement and sales insights.",
       "Inventory and revenue tracking workflows",
-      "Modular UI system with Next.js + Tailwind.",
-      "Supabase Auth + real-time data sync.",
       "Supports operational insights for creators.",
     ],
     githubUrl: "https://github.com/blurry04/webdevproj",
-    liveUrl: "https://quill-and-pigeon.vercel.app",
   },
   {
     title: "The Activity Hub",
-    subtitle: "Recreational Engagement",
+    subtitle: "Recreational Engagement Application",
     points: [
       "Location-based event discovery system",
       "Local sports meetup coordination platform.",
       "Group scheduling and participation tracking",
       "Designed for community engagement",
     ],
-    githubUrl: "https://github.com/blurry04/activityhub",
+    liveUrl: "http://activeportland.com/",
   },
   {
     title: "Market Analysis Tool",
@@ -36,7 +33,6 @@ const PROJECTS = [
       "Supports staffing and pay decisions",
       "Data pipelines for workforce insights",
     ],
-    githubUrl: "https://github.com/blurry04/",
     liveUrl: "https://empowerxinc.com/",
   },
   {
@@ -51,14 +47,15 @@ const PROJECTS = [
       githubUrl: "https://github.com/NEU-Roux/final-project-blurry04",
     },
   {
-    title: "Signal Console",
-    subtitle: "Product Ops Workspace",
+    title: "Pulse Tonight",
+    subtitle: "Portland's Nightlife",
     points: [
-      "Unified alerts, metrics, and product update tracking.",
-      "Role-based views for stakeholders and operators.",
-      "Automated summaries for weekly decision review.",
+      "Your nightly guide to the best events in Portland, ME",
+      "Discover events by Time and Location.",
+      "Save favorites, grab tickets, and add plans to your calendar in one tap.",
     ],
-    githubUrl: "https://github.com/blurry04/mockup",
+    githubUrl: "https://github.com/blurry04/casco-culture",
+    liveUrl: "https://casco-culture-965csj8qy-blurry04s-projects.vercel.app/"
   },
 ];
 

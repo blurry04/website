@@ -27,6 +27,10 @@ export default function HeaderNav() {
     const hamburgerSpace = 44;
 
     const evaluate = () => {
+      if (window.matchMedia("(max-width: 640px)").matches) {
+        setVisibleCount(0);
+        return;
+      }
       if (!navRef.current || !measureRef.current) {
         return;
       }

@@ -35,7 +35,11 @@ export default function SiteFooter() {
           </div>
         </div>
         <div className="flex flex-col items-center gap-2 text-center">
-          <div className="flex items-center gap-3">
+          <a
+            href="#home"
+            className="flex items-center gap-3 transition hover:text-[var(--ink)]"
+            aria-label="Back to top"
+          >
             <img
               src="/bg_logo.png"
               alt="Gaurav Advani logo"
@@ -44,7 +48,7 @@ export default function SiteFooter() {
             <p className="text-base font-semibold text-[var(--ink)]/80">
               Gaurav Advani
             </p>
-          </div>
+          </a>
           <p className="text-[12px] uppercase tracking-[0.22em] text-[var(--muted)]/70">
             © {year} Gaurav Advani
           </p>
