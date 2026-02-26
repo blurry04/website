@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, type Easing } from "framer-motion";
+import { motion, useReducedMotion, type Easing, type Variants } from "framer-motion";
 import { useActiveSectionContext } from "./ActiveSectionContext";
 
 const EDUCATION = [
@@ -47,61 +47,74 @@ export default function EducationSection() {
   const prefersReducedMotion = useReducedMotion();
   const { activeId } = useActiveSectionContext();
   const isFocused = activeId === "education";
-  const easeStandard: Easing = [0.25, 0.1, 0.25, 1];
+  const cardEase: Easing = "easeOut";
 
-  const sectionVariants = {
+  const sectionVariants: Variants = {
     hidden: {},
     show: {
-      transition: prefersReducedMotion ? {} : { staggerChildren: 0.06 },
+      transition: {
+        staggerChildren: prefersReducedMotion ? 0 : 0.06,
+      },
     },
   };
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 10 },
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 14 },
     show: {
       opacity: 1,
       y: 0,
-      transition: prefersReducedMotion
-        ? { duration: 0 }
-        : { duration: 0.45, ease: easeStandard },
+      transition: {
+        duration: prefersReducedMotion ? 0 : 0.6,
+        ease: cardEase,
+      },
     },
   };
 
-  const taVariants = {
+  const taVariants: Variants = {
     hidden: { opacity: 0, y: 6 },
     show: {
       opacity: 1,
       y: 0,
-      transition: prefersReducedMotion
-        ? { duration: 0 }
-        : { delay: 0.12, duration: 0.35, ease: easeStandard },
+      transition: {
+        delay: prefersReducedMotion ? 0 : 0.12,
+        duration: prefersReducedMotion ? 0 : 0.35,
+        ease: cardEase,
+      },
     },
   };
 
-  const pillContainer = {
+  const pillContainer: Variants = {
     hidden: {},
     show: {
-      transition: prefersReducedMotion ? {} : { staggerChildren: 0.03, delayChildren: 0.15 },
+      transition: {
+        staggerChildren: prefersReducedMotion ? 0 : 0.03,
+        delayChildren: prefersReducedMotion ? 0 : 0.15,
+      },
     },
   };
 
-  const pillItem = {
+  const pillItem: Variants = {
     hidden: { opacity: 0, y: 4 },
     show: {
       opacity: 1,
       y: 0,
-      transition: prefersReducedMotion ? { duration: 0 } : { duration: 0.25 },
+      transition: {
+        duration: prefersReducedMotion ? 0 : 0.25,
+        ease: cardEase,
+      },
     },
   };
 
-  const learnedVariants = {
+  const learnedVariants: Variants = {
     hidden: { opacity: 0, y: 6 },
     show: {
       opacity: 1,
       y: 0,
-      transition: prefersReducedMotion
-        ? { duration: 0 }
-        : { delay: 0.25, duration: 0.35, ease: easeStandard },
+      transition: {
+        delay: prefersReducedMotion ? 0 : 0.25,
+        duration: prefersReducedMotion ? 0 : 0.35,
+        ease: cardEase,
+      },
     },
   };
 
