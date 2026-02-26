@@ -55,7 +55,7 @@ const PROJECTS = [
       "Save favorites, grab tickets, and add plans to your calendar in one tap.",
     ],
     githubUrl: "https://github.com/blurry04/casco-culture",
-    liveUrl: "https://casco-culture-965csj8qy-blurry04s-projects.vercel.app/"
+    liveUrl: "https://casco-culture.vercel.app/"
   },
 ];
 
