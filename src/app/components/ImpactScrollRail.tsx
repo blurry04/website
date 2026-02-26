@@ -91,22 +91,6 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
       ro.disconnect();
     };
   }, [items.length, isMobile]);
-  // useLayoutEffect(() => {
-  //   const updateMeasures = () => {
-  //     const rail = railRef.current;
-  //     if (!rail) return;
-  //     const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-  //     const scrollWidth = rail.scrollWidth;
-  //     const max = Math.max(0, scrollWidth - viewportWidth);
-  //     // const endPadding = 10;
-  //     setMaxTranslate(max + endPadding);
-  //     setSectionHeight((window.innerHeight || 0) + max + endPadding);
-  //   };
-
-  //   updateMeasures();
-  //   window.addEventListener("resize", updateMeasures);
-  //   return () => window.removeEventListener("resize", updateMeasures);
-  // }, [items.length]);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -234,7 +218,7 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
 
                       {/* Right column */}
                       <div className="min-w-0 min-h-0 flex h-full flex-col">
-                        <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--ink)]/55">
+                        <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--accent)]/80">
                           Core Contributions
                         </p>
 
@@ -254,7 +238,7 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
 
                         {/* Technologies pinned to bottom; prevent wrap-induced wobble */}
                         <div className="mt-auto pt-6 min-h-0">
-                          <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--ink)]/55">
+                          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--accent)]/80">
                             Impact Areas
                           </p>
                           <div className="mt-3 flex flex-col gap-2">
@@ -262,7 +246,7 @@ export default function ImpactScrollRail({ items }: ImpactScrollRailProps) {
                               <span
                                 key={tag}
                                 title={tag}
-                                className="inline-block w-fit rounded-full bg-[rgba(47,126,104,0.08)] px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[var(--ink)]/70"
+                                className="pill-strong inline-block w-fit rounded-full bg-[rgba(47,126,104,0.08)] px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[var(--ink)]/70"
                               >
                                 {tag}
                               </span>

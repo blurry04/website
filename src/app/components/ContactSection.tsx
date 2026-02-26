@@ -32,7 +32,7 @@ const CONTACTS: ContactItem[] = [
   },
   {
     label: "ORCID",
-    href: "https://orcid.org/",
+    href: "https://orcid.org/0009-0006-9802-8635",
     icon: () => (
       <span className="text-[11px] font-semibold tracking-[0.18em]">OR</span>
     ),
@@ -79,24 +79,27 @@ export default function ContactSection() {
       <div className="grid h-auto items-stretch gap-6 md:grid-cols-[30%_70%]">
         <div className="flex h-full max-w-[520px] flex-col gap-3">
           <p className="text-[14px] font-semibold uppercase tracking-[0.4em] text-[var(--muted)] drop-shadow-[0_4px_12px_rgba(32,36,43,0.18)] sm:text-[16px]">
-            IDEA TO INFRASTRUCTURE
+            Next Chapter
           </p>
           <p className="mt-4 text-[14px] text-[var(--muted)] sm:mt-5 sm:text-[15px]">
-           Focused on clean scalability, reliability, and long-term maintainability.
+            Focused on building systems that scale with clarity, reliability, and long-term intent. Execution stays disciplined and grounded in fundamentals, not noise or shortcuts. 
           </p>
-          <p className="text-[14px] text-[var(--muted)] sm:text-[15px]">
-           Execution driven by discipline, not noise.  
-          </p>
-          <p className="text-[14px] text-[var(--muted)] sm:text-[15px]">
-           Strong foundations make bold ideas possible.
-          </p>
-          <p className="text-[14px] text-[var(--muted)] sm:text-[15px]">
-          Where ambition exists, strong foundations make it operational.
+          <p className="mt-4 text-[14px] text-[var(--muted)] sm:mt-5 sm:text-[15px]">
+          The next chapter begins where ambition meets structure and ideas become operational.
           </p>
         </div>
 
-        <div className="flex h-full flex-col items-start justify-center gap-4 md:items-center">
-          <div className="flex flex-wrap items-center justify-start gap-3 md:justify-center">
+        <div className="contact-hang flex h-full flex-col items-start justify-center gap-4 md:items-center">
+          <motion.div
+            variants={itemVariants}
+            whileHover={isFocused ? { y: -2, scale: 1.01 } : undefined}
+            whileFocus={isFocused ? { y: -2, scale: 1.01 } : undefined}
+            className="contact-hang__cta inline-flex items-center rounded-2xl border border-[var(--line)] px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.22em] text-[var(--muted)] transition hover:bg-[var(--accent-soft)]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]/60"
+            tabIndex={0}
+          >
+            Let's talk Strategy!
+          </motion.div>
+          <div className="contact-hang__icons flex flex-wrap items-center justify-start gap-3 md:justify-center">
             {CONTACTS.map((item) => {
               const Icon = item.icon;
               return (
@@ -109,22 +112,13 @@ export default function ContactSection() {
                   variants={itemVariants}
                   whileHover={isFocused ? { y: -2, scale: 1.01 } : undefined}
                   whileFocus={isFocused ? { y: -2, scale: 1.01 } : undefined}
-                  className={`inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--line)] text-[var(--accent)] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]/60 ${item.hoverClass}`}
+                  className={`inline-flex h-[50px] w-[50px] items-center justify-center rounded-full border border-[var(--line)] text-[var(--accent)] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]/60 ${item.hoverClass}`}
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-5 w-5" />
                 </motion.a>
               );
             })}
           </div>
-          <motion.div
-            variants={itemVariants}
-            whileHover={isFocused ? { y: -2, scale: 1.01 } : undefined}
-            whileFocus={isFocused ? { y: -2, scale: 1.01 } : undefined}
-            className="inline-flex items-center rounded-2xl border border-[var(--line)] px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.22em] text-[var(--muted)] transition hover:bg-[var(--accent-soft)]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]/60"
-            tabIndex={0}
-          >
-            Get in touch
-          </motion.div>
         </div>
       </div>
     </motion.div>

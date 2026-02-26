@@ -335,9 +335,9 @@ export default function Home() {
                   OPEN TO PRODUCT AND TECH
                 </span>
               </div>
-              <div className="grid gap-8 pt-0 lg:grid-cols-[1.25fr_0.75fr] lg:items-stretch md:gap-10">
+              <div className="hero-grid grid gap-8 pt-0 lg:grid-cols-[1.25fr_0.75fr] lg:items-stretch md:gap-10">
                 <div ref={heroTextRef} className="flex flex-col gap-6">
-                  <span className="font-space text-left text-[52px] font-black uppercase tracking-[-0.02em] leading-[0.88] text-white pts-shadow sm:text-[76px] lg:text-[116px]">
+                  <span className="hero-title-stack font-space text-left text-[52px] font-black uppercase tracking-[-0.02em] leading-[0.88] text-white pts-shadow sm:text-[76px] lg:text-[116px]">
                     <span className="block pts-line text-[var(--ink)]" data-text="Product.">
                       Product<span className="pts-dot">.</span>
                     </span>
@@ -362,7 +362,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="-mt-[12px] flex w-full justify-center">
+              <div className="hero-react-row -mt-[12px] flex w-full justify-center">
                 <svg
                   className="react-icon react-spin text-[var(--muted)]"
                   viewBox="-11.5 -10.23174 23 20.46348"
@@ -379,15 +379,18 @@ export default function Home() {
                   <circle r="2" fill="currentColor" />
                 </svg>
               </div>
-              <div className="-mt-[12px] flex w-full justify-center">
+              <div className="hero-headline-row -mt-[12px] flex w-full justify-center">
                 <p
                   ref={heroHeadlineRef}
-                  className="hero-flow font-space text-center text-[18px] font-semibold text-[var(--ink)] uppercase md:text-[18px] lg:text-[18px] text-shadow-sm headline-shadow"
+                  className="hero-flow hero-headline-lines font-space text-center text-[18px] font-semibold text-[var(--ink)] uppercase md:text-[18px] lg:text-[18px] text-shadow-sm headline-shadow"
                 >
-                  Building software where{" "}
-                  <span className="text-[var(--accent)]">strategy</span>{" "}
-                  <span className="headline-and">and</span>{" "}
-                  <span className="text-[var(--accent)]">engineering</span> move in sync.
+                  <span className="hero-headline-line">Building software where</span>{" "}
+                  <span className="hero-headline-line">
+                    <span className="text-[var(--accent)]">strategy</span>{" "}
+                    <span className="headline-and">and</span>{" "}
+                    <span className="text-[var(--accent)]">engineering</span>
+                  </span>{" "}
+                  <span className="hero-headline-line">move in sync.</span>
                 </p>
               </div>
               <div className="flex w-full justify-center">

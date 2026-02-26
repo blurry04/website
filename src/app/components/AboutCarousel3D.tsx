@@ -144,6 +144,7 @@ const AboutCarousel3D = () => {
   const [cardDims, setCardDims] = useState({ width: 240, height: 220 });
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const [elementIndices, setElementIndices] = useState(() => {
     const left = (CARDS.length - 1 + CARDS.length) % CARDS.length;
     const center = 0;
@@ -466,8 +467,32 @@ const AboutCarousel3D = () => {
   }, [syncSlots]);
 
   useEffect(() => {
+    if (isMobile) {
+      handleNextRef.current = () => {
+        setActiveIndex((prev) => (prev + 1) % CARDS.length);
+      };
+      return;
+    }
     handleNextRef.current = handleNext;
-  }, [handleNext]);
+  }, [handleNext, isMobile]);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 640px)");
+    const handleMedia = () => setIsMobile(media.matches);
+    handleMedia();
+    if (media.addEventListener) {
+      media.addEventListener("change", handleMedia);
+    } else {
+      media.addListener(handleMedia);
+    }
+    return () => {
+      if (media.removeEventListener) {
+        media.removeEventListener("change", handleMedia);
+      } else {
+        media.removeListener(handleMedia);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -496,10 +521,13 @@ const AboutCarousel3D = () => {
         window.clearInterval(intervalRef.current);
       }
     };
-  }, [scheduleAutoAdvance, updateSlotConfig]);
+  }, [isMobile, scheduleAutoAdvance, updateSlotConfig]);
 
   const leftCard = useMemo(() => CARDS[elementIndices.left], [elementIndices.left]);
-  const centerCard = useMemo(() => CARDS[elementIndices.center], [elementIndices.center]);
+  const centerCard = useMemo(
+    () => (isMobile ? CARDS[activeIndex] : CARDS[elementIndices.center]),
+    [activeIndex, elementIndices.center, isMobile]
+  );
   const rightCard = useMemo(() => CARDS[elementIndices.right], [elementIndices.right]);
 
   return (
@@ -510,104 +538,141 @@ const AboutCarousel3D = () => {
         style={{ perspective: "1200px" }}
       >
         <div className="absolute inset-0">
-          <div
-            ref={leftRef}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)] shadow-sm"
-            style={{ width: cardDims.width, height: cardDims.height }}
-            tabIndex={0}
-            role="group"
-            aria-label={leftCard.title}
-          >
-            <div className="about-card-inner flex h-full flex-col">
-              <div className="about-card-text flex-[0_0_25%]">
-                <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                  {leftCard.title}
-                </p>
-                <span className="mt-2 block h-px w-10 bg-[var(--line)]" />
-              </div>
-              <div className="about-card-text flex-[0_0_35%] flex items-center">
-                <p className="text-[12px] text-[var(--muted)]">{leftCard.description}</p>
-              </div>
-              <div className="flex-[0_0_40%] flex items-end">
-                <div className="flex flex-wrap gap-2">
-                  {leftCard.chips.map((chip) => (
-                    <span
-                      key={chip}
-                      className="rounded-full border border-[var(--line)] bg-[var(--accent-soft)] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]"
-                    >
-                      {chip}
-                    </span>
-                  ))}
+          {isMobile ? (
+            <div
+              ref={centerRef}
+              className="about-card--mobile absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)]"
+              style={{ width: cardDims.width, height: cardDims.height }}
+              tabIndex={0}
+              role="group"
+              aria-label={centerCard.title}
+            >
+              <div className="about-card-inner flex h-full flex-col">
+                <div className="about-card-text flex-[0_0_25%]">
+                  <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                    {centerCard.title}
+                  </p>
+                  <span className="mt-2 block h-px w-10 bg-[var(--line)]" />
+                </div>
+                <div className="about-card-text flex-[0_0_35%] flex items-center">
+                  <p className="text-[12px] text-[var(--muted)]">{centerCard.description}</p>
+                </div>
+                <div className="flex-[0_0_40%] flex items-end">
+                  <div className="flex flex-wrap gap-2">
+                    {centerCard.chips.map((chip) => (
+                      <span
+                        key={chip}
+                        className="rounded-full border border-[var(--line)] bg-[var(--accent-soft)] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]"
+                      >
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <>
+              <div
+                ref={leftRef}
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)] shadow-sm"
+                style={{ width: cardDims.width, height: cardDims.height }}
+                tabIndex={0}
+                role="group"
+                aria-label={leftCard.title}
+              >
+                <div className="about-card-inner flex h-full flex-col">
+                  <div className="about-card-text flex-[0_0_25%]">
+                    <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                      {leftCard.title}
+                    </p>
+                    <span className="mt-2 block h-px w-10 bg-[var(--line)]" />
+                  </div>
+                  <div className="about-card-text flex-[0_0_35%] flex items-center">
+                    <p className="text-[12px] text-[var(--muted)]">{leftCard.description}</p>
+                  </div>
+                  <div className="flex-[0_0_40%] flex items-end">
+                    <div className="flex flex-wrap gap-2">
+                      {leftCard.chips.map((chip) => (
+                        <span
+                          key={chip}
+                          className="rounded-full border border-[var(--line)] bg-[var(--accent-soft)] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]"
+                        >
+                          {chip}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-          <div
-            ref={centerRef}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)]"
-            style={{ width: cardDims.width, height: cardDims.height }}
-            tabIndex={0}
-            role="group"
-            aria-label={centerCard.title}
-          >
-            <div className="about-card-inner flex h-full flex-col">
-              <div className="about-card-text flex-[0_0_25%]">
-                <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                  {centerCard.title}
-                </p>
-                <span className="mt-2 block h-px w-10 bg-[var(--line)]" />
-              </div>
-              <div className="about-card-text flex-[0_0_35%] flex items-center">
-                <p className="text-[12px] text-[var(--muted)]">{centerCard.description}</p>
-              </div>
-              <div className="flex-[0_0_40%] flex items-end">
-                <div className="flex flex-wrap gap-2">
-                  {centerCard.chips.map((chip) => (
-                    <span
-                      key={chip}
-                      className="rounded-full border border-[var(--line)] bg-[var(--accent-soft)] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]"
-                    >
-                      {chip}
-                    </span>
-                  ))}
+              <div
+                ref={centerRef}
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)]"
+                style={{ width: cardDims.width, height: cardDims.height }}
+                tabIndex={0}
+                role="group"
+                aria-label={centerCard.title}
+              >
+                <div className="about-card-inner flex h-full flex-col">
+                  <div className="about-card-text flex-[0_0_25%]">
+                    <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                      {centerCard.title}
+                    </p>
+                    <span className="mt-2 block h-px w-10 bg-[var(--line)]" />
+                  </div>
+                  <div className="about-card-text flex-[0_0_35%] flex items-center">
+                    <p className="text-[12px] text-[var(--muted)]">{centerCard.description}</p>
+                  </div>
+                  <div className="flex-[0_0_40%] flex items-end">
+                    <div className="flex flex-wrap gap-2">
+                      {centerCard.chips.map((chip) => (
+                        <span
+                          key={chip}
+                          className="rounded-full border border-[var(--line)] bg-[var(--accent-soft)] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]"
+                        >
+                          {chip}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div
-            ref={rightRef}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)] shadow-sm"
-            style={{ width: cardDims.width, height: cardDims.height }}
-            tabIndex={0}
-            role="group"
-            aria-label={rightCard.title}
-          >
-            <div className="about-card-inner flex h-full flex-col">
-              <div className="about-card-text flex-[0_0_25%]">
-                <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                  {rightCard.title}
-                </p>
-                <span className="mt-2 block h-px w-10 bg-[var(--line)]" />
-              </div>
-              <div className="about-card-text flex-[0_0_35%] flex items-center">
-                <p className="text-[12px] text-[var(--muted)]">{rightCard.description}</p>
-              </div>
-              <div className="flex-[0_0_40%] flex items-end">
-                <div className="flex flex-wrap gap-2">
-                  {rightCard.chips.map((chip) => (
-                    <span
-                      key={chip}
-                      className="rounded-full border border-[var(--line)] bg-[var(--accent-soft)] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]"
-                    >
-                      {chip}
-                    </span>
-                  ))}
+              <div
+                ref={rightRef}
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] p-6 text-[var(--ink)] shadow-sm"
+                style={{ width: cardDims.width, height: cardDims.height }}
+                tabIndex={0}
+                role="group"
+                aria-label={rightCard.title}
+              >
+                <div className="about-card-inner flex h-full flex-col">
+                  <div className="about-card-text flex-[0_0_25%]">
+                    <p className="text-[16px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                      {rightCard.title}
+                    </p>
+                    <span className="mt-2 block h-px w-10 bg-[var(--line)]" />
+                  </div>
+                  <div className="about-card-text flex-[0_0_35%] flex items-center">
+                    <p className="text-[12px] text-[var(--muted)]">{rightCard.description}</p>
+                  </div>
+                  <div className="flex-[0_0_40%] flex items-end">
+                    <div className="flex flex-wrap gap-2">
+                      {rightCard.chips.map((chip) => (
+                        <span
+                          key={chip}
+                          className="rounded-full border border-[var(--line)] bg-[var(--accent-soft)] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]"
+                        >
+                          {chip}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </div>
 

@@ -8,7 +8,7 @@ export type ProjectItem = {
   title: string;
   subtitle: string;
   points: string[];
-  githubUrl: string;
+  githubUrl?: string;
   liveUrl?: string;
 };
 
@@ -67,7 +67,10 @@ export default function Projects3D({ items }: Projects3DProps) {
         {items.map((project, index) => {
           const state = getState(index);
           const isActive = state === "active";
-          const primaryUrl = project.liveUrl ?? project.githubUrl;
+          const primaryUrl =
+            (project.liveUrl && project.liveUrl.trim()) ||
+            (project.githubUrl && project.githubUrl.trim()) ||
+            "";
           const firstRowOffset = index < 3 ? "xl:mt-[30px]" : "";
           const secondRowCenter =
             index === 3
@@ -127,13 +130,15 @@ export default function Projects3D({ items }: Projects3DProps) {
               }}
             >
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_8%,rgba(47,126,104,0.18)_0%,rgba(47,126,104,0.06)_38%,rgba(47,126,104,0)_70%)]" />
-              <a
-                href={primaryUrl}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`Open ${project.title}`}
-                className="absolute inset-0 z-0"
-              />
+              {primaryUrl && (
+                <a
+                  href={primaryUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Open ${project.title}`}
+                  className="absolute inset-0 z-0"
+                />
+              )}
               <div className="relative z-10 flex items-start justify-between gap-3">
                 <div>
                   <h3 className="text-lg font-semibold text-[var(--ink)]">
@@ -154,16 +159,18 @@ export default function Projects3D({ items }: Projects3DProps) {
                       <ExternalLink className="h-4 w-4 shrink-0" />
                     </a>
                   )}
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`Open ${project.title} GitHub`}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--line)] text-[var(--ink)] leading-none transition hover:-translate-y-0.5 hover:text-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
-                    onPointerDown={(event) => event.stopPropagation()}
-                  >
-                    <Github className="h-4 w-4 shrink-0" />
-                  </a>
+                  {project.githubUrl && project.githubUrl.trim() && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Open ${project.title} GitHub`}
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--line)] text-[var(--ink)] leading-none transition hover:-translate-y-0.5 hover:text-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
+                      onPointerDown={(event) => event.stopPropagation()}
+                    >
+                      <Github className="h-4 w-4 shrink-0" />
+                    </a>
+                  )}
                 </div>
               </div>
               <ul className="relative z-10 mt-4 grid gap-2 text-sm text-[var(--ink)]">
