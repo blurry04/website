@@ -1,7 +1,7 @@
 "use client";
 
 import { Mail, Github, Linkedin } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { useActiveSectionContext } from "./ActiveSectionContext";
 
 type ContactItem = {
@@ -45,25 +45,25 @@ export default function ContactSection() {
   const { activeId } = useActiveSectionContext();
   const isFocused = activeId === "contact";
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0, y: 10 },
     show: {
       opacity: 1,
       y: 0,
       transition: prefersReducedMotion
         ? { duration: 0 }
-        : { duration: 0.45, ease: [0.16, 1, 0.3, 1], staggerChildren: 0.05 },
+        : { duration: 0.45, ease: [0.16, 1, 0.3, 1] as const, staggerChildren: 0.05 },
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 8 },
     show: {
       opacity: 1,
       y: 0,
       transition: prefersReducedMotion
         ? { duration: 0 }
-        : { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+        : { duration: 0.3, ease: [0.16, 1, 0.3, 1] as const },
     },
   };
 
